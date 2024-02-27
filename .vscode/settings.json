@@ -1,0 +1,28 @@
+{
+  "material-icon-theme.folders.associations": {
+    "infra": "Jinja",
+    "authz": "Secure",
+    "workflows": "Azure-pipelines",
+    "github-actions": "Azure-pipelines",
+    "e2e": "Test",
+    "unit": "Test",
+    "infrastructure": "Jinja",
+    "persistence": "Database",
+    "dev": "Src",
+  },
+  "material-icon-theme.files.associations": {
+    "*.controller.ts": "nest-controller",
+    "*.service.ts": "nest-service",
+    "*.module.ts": "nest-module",
+    "*.decorator.ts": "nest-decorator",
+    "*.filter.ts": "nest-filter",
+    "*.guard.ts": "nest-guard",
+    "*.interceptor.ts": "nest-interceptor",
+    "*.middleware.ts": "nest-middleware",
+    "*.pipe.ts": "nest-pipe",
+    "*.resolver.ts": "nest-resolver",
+    "*.postgres.ts": "../../icons/postgreSQL",
+    "*.entity.ts": "../../icons/typeORM",
+    "*.config.ts": "Nix",
+  },
+}

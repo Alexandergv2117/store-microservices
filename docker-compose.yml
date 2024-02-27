@@ -1,0 +1,26 @@
+version: '3.8'
+
+name: store
+
+services:
+
+# Database
+
+  postgres-db:
+    container_name: store-postgres-db
+    image: store-postgres-db
+    build:
+      context: ./.dev/postgres
+      dockerfile: Dockerfile
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: store
+    networks:
+      - store-network
+
+networks:
+  store-network:
+    driver: bridge

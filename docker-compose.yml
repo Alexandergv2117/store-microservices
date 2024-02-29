@@ -8,9 +8,8 @@ services:
 
   postgres-db:
     container_name: store-postgres-db
-    image: store-postgres-db
     build:
-      context: ./.dev/postgres
+      context: ./dev/postgres
       dockerfile: Dockerfile
     ports:
       - 5432:5432
@@ -20,6 +19,31 @@ services:
       POSTGRES_DB: store
     networks:
       - store-network
+
+  # Services
+
+  users:
+    user: node
+    container_name: store-users
+    build:
+      context: ./services/users
+      dockerfile: ../../dev/services/nestjs/Dockerfile
+    expose:
+      - 5200
+    ports:
+      - 5200:5200
+    command: sh -c 'npm i && npm run start:dev'
+    volumes:
+      - ./services/users:/srv
+    networks:
+      - store-network
+    environment:
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_NAME: store_users
+      DB_LOGGING: false
 
 networks:
   store-network:

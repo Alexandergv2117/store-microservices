@@ -1,9 +1,8 @@
-FROM postgres:15
+FROM postgres:16.2
 
 ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=store
-
 
 COPY init.sql /docker-entrypoint-initdb.d/
 

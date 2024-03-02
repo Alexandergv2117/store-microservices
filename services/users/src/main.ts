@@ -27,11 +27,11 @@ async function bootstrap() {
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('docs', app, document);
+    SwaggerModule.setup('api', app, document);
   }
 
   await app.listen(PORT);
   Logger.log(`🚀 ${NAME} running on: ${await app.getUrl()}`);
-  Logger.log(`📚 ${NAME} Swagger running on: ${await app.getUrl()}/docs`);
+  Logger.log(`📚 ${NAME} Swagger running on: ${await app.getUrl()}/api`);
 }
 bootstrap();

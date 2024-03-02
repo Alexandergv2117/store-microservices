@@ -26,15 +26,19 @@ export class GetRoleService implements IGetRoleService {
   async getAll(
     query: PaginationDTO & SearchDTO,
   ): Promise<{ data: RolesEntity[]; total: number }> {
-    const result = await this.rolesRepository.findAll({
+    const [data, total] = await this.rolesRepository.findAll({
       limit: query.limit,
       page: query.page,
       search: query.search,
     });
 
+    if (total === 0) {
+      throw new HttpException('Roles not found', HttpStatus.NOT_FOUND);
+    }
+
     return {
-      data: result[0],
-      total: result[1],
+      data,
+      total,
     };
   }
 }

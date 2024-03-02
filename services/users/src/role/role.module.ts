@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CreateService } from './application/services/create/create.service';
@@ -9,6 +9,7 @@ import { GetRoleService } from './application/services/get/get.service';
 import { UpdateRoleService } from './application/services/update/update.service';
 import { DeleteService } from './application/services/delete/delete.service';
 
+@Global()
 @Module({
   imports: [TypeOrmModule.forFeature([RolesEntity])],
   controllers: [RoleController],
@@ -19,5 +20,6 @@ import { DeleteService } from './application/services/delete/delete.service';
     UpdateRoleService,
     DeleteService,
   ],
+  exports: [RolesRepositoryPostgres],
 })
 export class RoleModule {}

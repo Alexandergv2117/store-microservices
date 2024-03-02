@@ -2,6 +2,10 @@ version: '3.8'
 
 name: store
 
+networks:
+  store-network:
+    driver: bridge
+
 services:
 
 # Database
@@ -44,7 +48,3 @@ services:
       DB_PASSWORD: admin
       DB_NAME: store_users
       DB_LOGGING: false
-
-networks:
-  store-network:
-    driver: bridge

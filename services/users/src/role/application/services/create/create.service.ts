@@ -7,6 +7,7 @@ import { CreateRoleDTO } from '../../dto/create.dto';
 import { RolesEntity } from '../../../domain/entities/roles.entity';
 import { IRolesRepository } from '../../../domain/roles.repostory';
 import { RolesRepositoryPostgres } from '../../../infrastructure/persistence/role.postgres';
+import { getfield } from 'src/shared/infrastructure/utils/error';
 
 @Injectable()
 export class CreateService implements ICreateRoleService {
@@ -24,12 +25,12 @@ export class CreateService implements ICreateRoleService {
       await this.rolesRepository.create(role);
       return await this.rolesRepository.findById(role.id);
     } catch (error) {
-      console.error(error);
       if (error.code === '23505') {
+        const field = getfield(error.detail);
         throw new HttpException(
           {
             status: HttpStatus.CONFLICT,
-            message: 'Role already exists',
+            message: `${field} already exists`,
           },
           HttpStatus.CONFLICT,
         );
@@ -37,7 +38,7 @@ export class CreateService implements ICreateRoleService {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: 'Error creating user',
+          message: 'Error creating role',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

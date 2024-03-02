@@ -1,12 +1,16 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-
-import { NODE_ENV, PORT } from './shared/infrastructure/env';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
+
+import { AppModule } from './app.module';
+import { NODE_ENV, PORT } from './shared/infrastructure/env';
 
 const NAME = 'Users service';
 const GLOBAL_PREFIX = 'user-service';
@@ -17,6 +21,9 @@ async function bootstrap() {
   app.setGlobalPrefix(GLOBAL_PREFIX);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({ origin: '*' });
+
+  const reflector = app.get(Reflector);
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   if (NODE_ENV === 'development') {
     const config = new DocumentBuilder()

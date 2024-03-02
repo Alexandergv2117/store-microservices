@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { RolesEntity } from '../../../role/domain/entities/roles.entity';
 
@@ -11,6 +12,7 @@ export class UserEntity {
   username: string;
 
   @Column({ type: 'varchar', nullable: false })
+  @Exclude()
   password: string;
 
   @Column({ type: 'varchar', nullable: false })

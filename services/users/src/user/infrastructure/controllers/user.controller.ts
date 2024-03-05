@@ -46,7 +46,14 @@ export class UserController {
 
   @Get()
   async getAll(@Query() pagination: PaginationDTO, @Query() search: SearchDTO) {
-    return await this.getService.getAll({ ...pagination, ...search });
+    const user = await this.getService.getAll({ ...pagination, ...search });
+
+    return {
+      data: {
+        user: user.data,
+      },
+      total: user.total,
+    };
   }
 
   @Get(':id')

@@ -48,3 +48,26 @@ services:
       DB_PASSWORD: admin
       DB_NAME: store_users
       DB_LOGGING: false
+
+  products:
+    user: node
+    container_name: store-products
+    build:
+      context: ./services/products
+      dockerfile: ../../dev/services/nestjs/Dockerfile
+    expose:
+      - 5300
+    ports:
+      - 5300:5300
+    command: sh -c 'npm i && npm run start:dev'
+    volumes:
+      - ./services/products:/srv
+    networks:
+      - store-network
+    environment:
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_NAME: store_products
+      DB_LOGGING: false

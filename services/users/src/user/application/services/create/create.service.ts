@@ -35,13 +35,7 @@ export class CreateUserService implements ICreateUserService {
     const existRole = await this.rolesRepository.findByName(user.role);
 
     if (!existRole) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          message: 'Role not found',
-        },
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
 
     newUser.role = existRole;
@@ -52,21 +46,9 @@ export class CreateUserService implements ICreateUserService {
     } catch (error) {
       if (error.code === '23505') {
         const field = getfield(error.detail);
-        throw new HttpException(
-          {
-            status: HttpStatus.CONFLICT,
-            message: `${field} already exists`,
-          },
-          HttpStatus.CONFLICT,
-        );
+        throw new HttpException(`${field} already exists`, HttpStatus.CONFLICT);
       }
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: 'Error creating user',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('Error creating user', HttpStatus.BAD_REQUEST);
     }
   }
 }

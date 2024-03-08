@@ -25,11 +25,12 @@ export class CategoriesRepositoryPostgres implements ICategoriesRepository {
     search,
   }: PaginationDTO & SearchDTO): Promise<[CategoriesEntity[], number]> {
     return this.categoryRepository.findAndCount({
-      where: {
-        ...(search && {
-          description: Like(`%${search}%`),
-        }),
-      },
+      where: search
+        ? [
+            { category: Like(`%${search}%`) },
+            { description: Like(`%${search}%`) },
+          ]
+        : {},
       skip: (page - 1) * limit,
       take: limit,
     });

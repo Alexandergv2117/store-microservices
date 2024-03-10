@@ -34,15 +34,22 @@ export class ProductsEntity {
   @Column({ type: 'bool', nullable: false, default: true })
   published: boolean;
 
-  @OneToOne(() => DetailsEntity, (details) => details.product)
+  @OneToOne(() => DetailsEntity, (details) => details.product, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   details: DetailsEntity;
 
-  @OneToMany(() => ImagesEntity, (image) => image.product)
+  @OneToMany(() => ImagesEntity, (image) => image.product, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   images: ImagesEntity[];
 
   @OneToMany(
     () => ProductsCategoriesEntity,
     (productCategory) => productCategory.product,
+    { onDelete: 'CASCADE', onUpdate: 'CASCADE' },
   )
   productCategory: ProductsCategoriesEntity[];
 }

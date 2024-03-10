@@ -18,7 +18,6 @@ export class CategoriesRepositoryPostgres implements ICategoriesRepository {
     @InjectRepository(CategoriesEntity)
     private readonly categoryRepository: Repository<CategoriesEntity>,
   ) {}
-
   findAll({
     limit = 10,
     page = 1,

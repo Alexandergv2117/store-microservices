@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { CategoryController } from './infrastructure/controllers/category.controller';
 import { CategoriesEntity } from './domain/entities/categories.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,6 +8,7 @@ import { DeleteCategoryService } from './application/services/delete/delete.serv
 import { CreateCategoryService } from './application/services/create/create.service';
 import { UpdateCategoryService } from './application/services/update/update.service';
 
+@Global()
 @Module({
   imports: [TypeOrmModule.forFeature([CategoriesEntity])],
   controllers: [CategoryController],
@@ -18,5 +19,6 @@ import { UpdateCategoryService } from './application/services/update/update.serv
     CreateCategoryService,
     UpdateCategoryService,
   ],
+  exports: [CategoriesRepositoryPostgres],
 })
 export class CategoriesModule {}

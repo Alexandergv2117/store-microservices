@@ -1,4 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 import { RolesEntity } from '../../../role/domain/entities/roles.entity';
@@ -33,4 +41,13 @@ export class UserEntity {
   @ManyToOne(() => RolesEntity, (role) => role.users)
   @JoinColumn({ name: 'role_id' })
   role: RolesEntity;
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
+
+  @DeleteDateColumn({ type: 'timestamp', nullable: true, default: null })
+  deleted_at: Date | null;
 }

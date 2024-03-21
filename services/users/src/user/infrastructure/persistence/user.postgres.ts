@@ -53,6 +53,7 @@ export class UserRepositortPostgres implements IUserRepository {
       },
       skip: (page - 1) * limit,
       take: limit,
+      // withDeleted: true,
     });
   }
 

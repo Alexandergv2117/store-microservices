@@ -1,8 +1,9 @@
 package main
 
 import (
-	db "github.com/Alexandergv2117/store/src/database"
+	"github.com/Alexandergv2117/store/src/config"
 	"github.com/Alexandergv2117/store/src/models"
+	"github.com/Alexandergv2117/store/src/routes"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -11,7 +12,7 @@ type TokenRequest struct {
 	Password string `json:"password"`
 }
 
-func handleToken(c *fiber.Ctx) error {
+func GetUsersHandler(c *fiber.Ctx) error {
 	data := TokenRequest{}
 
 	if err := c.BodyParser(&data); err != nil {
@@ -19,9 +20,8 @@ func handleToken(c *fiber.Ctx) error {
 	}
 
 	// token := services.GenerateToken(data.Email)
-
 	var users []models.User
-	result := db.DB.Find(&users)
+	result := config.DB.Find(&users)
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"error": result.Error.Error(),
@@ -34,7 +34,7 @@ func handleToken(c *fiber.Ctx) error {
 }
 
 func main() {
-	db.DBConmnection()
+	config.DBConmnection()
 
 	// db.DB.AutoMigrate(models.User{}, models.Role{})
 
@@ -44,8 +44,12 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
-	app.Post("/token", handleToken)
-	app.Get("/user", handleToken)
+	app.Post("/token", GetUsersHandler)
+	app.Get("/user", GetUsersHandler)
+
+	// Routes
+
+	routes.AuthRoutes(app)
 
 	app.Listen(":5000")
 }

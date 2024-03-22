@@ -80,8 +80,8 @@ export class ProductRepositoryPostgres implements IProductsRepository {
     }
   }
   findAll({
-    limit,
-    page,
+    limit = 10,
+    page = 1,
     search,
   }: PaginationDTO & SearchDTO): Promise<[ProductsEntity[], number]> {
     return this.productRepository.findAndCount({

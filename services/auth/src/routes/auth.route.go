@@ -12,4 +12,6 @@ func AuthRoutes(a *fiber.App) {
 
 	// Define routes
 	r.Post("/login", controllers.Login)
+	r.Get("/validate", controllers.ValidateToken)
+	r.Get("/refresh", controllers.RefreshToken)
 }

@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/Alexandergv2117/store/src/repository"
 )
@@ -25,4 +26,26 @@ func Login(email string, password string) (string, repository.UserRepository, in
 	})
 
 	return token, existUser, 200, nil
+}
+
+func ValidateToken(token string) (repository.CustomClaims, error) {
+	parts := strings.Split(token, " ")
+
+	if len(parts) != 2 {
+		return repository.CustomClaims{}, errors.New("token mal formado")
+	}
+
+	tokenWituotBearer := parts[1]
+
+	return repository.ValidateJWT(tokenWituotBearer)
+}
+
+func RefreshToken(token string) (string, error) {
+	claims, err := ValidateToken(token)
+
+	if err != nil {
+		return "", err
+	}
+
+	return repository.SigninJWT(claims), nil
 }

@@ -7,11 +7,17 @@ export class ProductsCategoriesEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => ProductsEntity, (product) => product.id)
+  @ManyToOne(() => ProductsEntity, (product) => product.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'product_id' })
   product: ProductsEntity;
 
-  @ManyToOne(() => CategoriesEntity, (category) => category.id)
+  @ManyToOne(() => CategoriesEntity, (category) => category.id, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'category_id' })
   category: CategoriesEntity;
 }

@@ -15,6 +15,10 @@ export class CategoriesEntity {
   @OneToMany(
     () => ProductsCategoriesEntity,
     (productCategory) => productCategory.category,
+    {
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    },
   )
   productCategory: ProductsCategoriesEntity[];
 }

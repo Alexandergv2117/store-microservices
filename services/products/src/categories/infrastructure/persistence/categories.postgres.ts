@@ -18,18 +18,18 @@ export class CategoriesRepositoryPostgres implements ICategoriesRepository {
     @InjectRepository(CategoriesEntity)
     private readonly categoryRepository: Repository<CategoriesEntity>,
   ) {}
-
   findAll({
     limit = 10,
     page = 1,
     search,
   }: PaginationDTO & SearchDTO): Promise<[CategoriesEntity[], number]> {
     return this.categoryRepository.findAndCount({
-      where: {
-        ...(search && {
-          description: Like(`%${search}%`),
-        }),
-      },
+      where: search
+        ? [
+            { category: Like(`%${search}%`) },
+            { description: Like(`%${search}%`) },
+          ]
+        : {},
       skip: (page - 1) * limit,
       take: limit,
     });

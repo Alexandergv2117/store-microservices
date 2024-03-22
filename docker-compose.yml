@@ -26,6 +26,28 @@ services:
 
   # Services
 
+  auth:
+    container_name: store-auth
+    build:
+      context: ./services/auth
+      dockerfile: ../../dev/services/go/Dockerfile
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+    command: sh -c 'go mod download && go install && npm i && npm run dev'
+    volumes:
+      - ./services/auth:/srv
+    networks:
+      - store-network
+    environment:
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: admin
+      DB_NAME: store_users
+      JWT_SECRET: secret
+
   users:
     user: node
     container_name: store-users

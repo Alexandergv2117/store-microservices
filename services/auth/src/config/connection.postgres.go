@@ -7,7 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var DSN = "host=postgres-db user=admin password=admin dbname=store_users port=5432"
+var HOST = GetEnv("DB_HOST")
+var USER = GetEnv("DB_USERNAME")
+var PASS = GetEnv("DB_PASSWORD")
+var DB_NAME = GetEnv("DB_NAME")
+var PORT = GetEnv("DB_PORT")
+
+var DSN = "host=" + HOST + " user=" + USER + " password=" + PASS + " dbname=" + DB_NAME + " port=" + PORT
 var DB *gorm.DB
 
 func DBConmnection() {

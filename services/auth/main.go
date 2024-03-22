@@ -19,5 +19,5 @@ func main() {
 
 	routes.AuthRoutes(app)
 
-	app.Listen(":5000")
+	app.Listen(":" + config.GetEnv("PORT"))
 }

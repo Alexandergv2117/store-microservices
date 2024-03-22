@@ -29,7 +29,8 @@ func GetUserByEmail(email string) (UserRepository, error) {
 			users 
 		LEFT JOIN 
 			roles ON users.role_id = roles.id 
-		WHERE email = ?
+		WHERE
+			email = ?
 		`
 
 	res := config.DB.Raw(query, email).Scan(&user)

@@ -17,13 +17,23 @@ func Login(c *fiber.Ctx) error {
 		return err
 	}
 
-	res, err := services.Login(data.Email, data.Password)
+	res, user, code, err := services.Login(data.Email, data.Password)
 
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{
-			"error": err.Error(),
+		return c.Status(code).JSON(fiber.Map{
+			"message": err.Error(),
 		})
 	}
 
-	return c.JSON(res)
+	return c.JSON(fiber.Map{
+		"token": res,
+		"user": fiber.Map{
+			"id":       user.ID,
+			"username": user.Username,
+			"email":    user.Email,
+			"role":     user.Role,
+			"name":     user.Name,
+			"lastname": user.Lastname,
+		},
+	})
 }

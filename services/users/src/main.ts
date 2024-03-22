@@ -13,7 +13,7 @@ import { AppModule } from './app.module';
 import { NODE_ENV, PORT } from './shared/infrastructure/env';
 
 const NAME = 'Users service';
-const GLOBAL_PREFIX = 'user-service';
+const GLOBAL_PREFIX = 'user';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

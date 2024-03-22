@@ -8,7 +8,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const NAME = 'Products service';
-const GLOBAL_PREFIX = 'products-service';
+const GLOBAL_PREFIX = 'product';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

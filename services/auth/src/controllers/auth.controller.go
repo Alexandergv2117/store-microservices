@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"fmt"
-
 	"github.com/Alexandergv2117/store/src/services"
 	"github.com/gofiber/fiber/v2"
 )
@@ -42,8 +40,6 @@ func Login(c *fiber.Ctx) error {
 
 func ValidateToken(c *fiber.Ctx) error {
 	token := c.Get("Authorization")
-
-	fmt.Println(token)
 
 	if token == "" {
 		return c.Status(401).JSON(fiber.Map{

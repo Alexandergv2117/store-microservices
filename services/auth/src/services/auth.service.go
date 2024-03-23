@@ -10,12 +10,12 @@ import (
 func Login(email string, password string) (string, repository.UserRepository, int, error) {
 	existUser, err := repository.GetUserByEmail(email)
 
-	if err != nil {
-		return "", existUser, 404, err
+	if err != nil || existUser.Email == "" {
+		return "", existUser, 404, errors.New("email not found")
 	}
 
 	if !repository.ComparePasswords(existUser.Password, password) {
-		return "", existUser, 400, errors.New("la contraseña proporcionada no es válida")
+		return "", existUser, 400, errors.New("invalid password")
 	}
 
 	token := repository.SigninJWT(repository.CustomClaims{

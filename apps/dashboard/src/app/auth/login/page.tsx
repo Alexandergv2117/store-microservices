@@ -2,8 +2,11 @@
 
 import { Button, Input } from '@nextui-org/react';
 import { useForm } from 'react-hook-form';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -11,7 +14,17 @@ export default function LoginPage() {
   } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
+    const res = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    if (res?.error) {
+      alert(res.error);
+    } else {
+      router.push('/dashboard');
+    }
   });
 
   return (

@@ -33,10 +33,16 @@ export const authOptions: NextAuthOptions = {
           const { user } = await res.json();
           return user;
         }
+
+        const error = await res.json();
+        throw new Error(error.message);
         return null;
       },
     }),
   ],
+  pages: {
+    signIn: '/auth/login',
+  },
   callbacks: {},
 };
 

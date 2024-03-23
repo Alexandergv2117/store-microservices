@@ -7,7 +7,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Store Admin',
+  title: 'Store admin dashboard',
   description: 'Store with next.js and microservices',
 };
 

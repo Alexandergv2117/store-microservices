@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Alexandergv2117/store/src/config"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -15,7 +16,7 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-var signinKey = []byte("secret")
+var signinKey = config.GetEnv("JWT_SECRET")
 
 func SigninJWT(claim CustomClaims) string {
 	claims := CustomClaims{

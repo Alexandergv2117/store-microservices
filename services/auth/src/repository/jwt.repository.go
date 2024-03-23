@@ -16,9 +16,8 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-var signinKey = config.GetEnv("JWT_SECRET")
-
 func SigninJWT(claim CustomClaims) string {
+	signinKey := []byte(config.GetEnv("JWT_SECRET"))
 	claims := CustomClaims{
 		Id:       claim.Id,
 		Username: claim.Username,
@@ -42,6 +41,8 @@ func SigninJWT(claim CustomClaims) string {
 }
 
 func RefreshToken(tokenString string) (string, error) {
+	signinKey := []byte(config.GetEnv("JWT_SECRET"))
+
 	claims, err := ValidateJWT(tokenString)
 
 	if err != nil {
@@ -62,6 +63,8 @@ func RefreshToken(tokenString string) (string, error) {
 }
 
 func ValidateJWT(tokenString string) (CustomClaims, error) {
+	signinKey := []byte(config.GetEnv("JWT_SECRET"))
+
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return signinKey, nil
 	})

@@ -88,6 +88,8 @@
   },
   "dependencies": {
     "@nextui-org/react": "2.2.10",
-    "framer-motion": "11.0.20"
+    "framer-motion": "11.0.20",
+    "next-auth": "4.24.7",
+    "react-hook-form": "7.51.1"
   }
 }

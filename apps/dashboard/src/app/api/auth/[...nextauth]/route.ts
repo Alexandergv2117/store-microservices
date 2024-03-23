@@ -36,7 +36,6 @@ export const authOptions: NextAuthOptions = {
 
         const error = await res.json();
         throw new Error(error.message);
-        return null;
       },
     }),
   ],

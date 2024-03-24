@@ -8,17 +8,25 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  User,
   Chip,
   Tooltip,
+  User,
 } from '@nextui-org/react';
 
-import { DeleteIcon } from '@/app/components/ui/icons/delete-icon';
-import { EditIcon } from '@/app/components/ui/icons/edit-icon';
-import { EyeIcon } from '@/app/components/ui/icons/eye-icon';
-import { users } from './data';
+import { DeleteIcon } from '@/components/ui/icons/delete-icon';
+import { EditIcon } from '@/components/ui/icons/edit-icon';
+import { EyeIcon } from '@/components/ui/icons/eye-icon';
 
-type User = (typeof users)[0];
+type Product = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  price: string;
+  currency: string;
+  stock: number;
+  published: boolean;
+};
 
 const columns = [
   { name: 'NAME', uid: 'name' },
@@ -28,22 +36,26 @@ const columns = [
   { name: 'ACTIONS', uid: 'actions' },
 ];
 
-export default function Products() {
-  const renderCell = useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+export interface ProductsProps {
+  products: Product[];
+}
+
+export default function Products({ products }: ProductsProps) {
+  const renderCell = useCallback((product: Product, columnKey: React.Key) => {
+    const cellValue = product[columnKey as keyof Product];
 
     switch (columnKey) {
       case 'name':
         return (
           <User
-            avatarProps={{ radius: 'lg', src: user.image }}
+            avatarProps={{ radius: 'lg', src: product.image }}
             name={cellValue}
           />
         );
       case 'price':
         return (
-          <span key={user.id}>
-            ${cellValue} {user.currency}
+          <span>
+            ${cellValue} {product.currency}
           </span>
         );
       case 'published':
@@ -95,7 +107,7 @@ export default function Products() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={users}>
+        <TableBody items={products}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

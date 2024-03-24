@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/Alexandergv2117/store/src/services"
 	"github.com/gofiber/fiber/v2"
 )
@@ -35,6 +37,29 @@ func Login(c *fiber.Ctx) error {
 			"name":     user.Name,
 			"lastname": user.Lastname,
 		},
+	})
+}
+
+func GenerateTokenNext(c *fiber.Ctx) error {
+	token := c.Get("Authorization")
+
+	if token == "" {
+		return c.Status(401).JSON(fiber.Map{
+			"message": "unauthorized",
+		})
+	}
+
+	tokenSign, code, err := services.ValidateTokenNext(token)
+	fmt.Println(tokenSign)
+
+	if err != nil {
+		return c.Status(code).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"accessToken": tokenSign,
 	})
 }
 

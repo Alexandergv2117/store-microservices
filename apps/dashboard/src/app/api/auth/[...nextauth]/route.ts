@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import type { NextAuthOptions } from 'next-auth';
+import * as jwt from 'jsonwebtoken';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -30,7 +31,8 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (res.ok) {
-          const { user } = await res.json();
+          const { user, accessToken } = await res.json();
+          user.accessToken = accessToken;
           return user;
         }
 
@@ -42,7 +44,41 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/login',
   },
-  callbacks: {},
+  callbacks: {
+    async jwt({ token }) {
+      const tokenSign = jwt.sign(
+        {
+          name: token.name,
+          email: token.email,
+        },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: '1m',
+        },
+      );
+
+      const res = await fetch(`${process.env.API_URL}/auth/generate`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: process.env.API_KEY || '',
+          authorization: `Bearer ${tokenSign}`,
+        },
+      });
+
+      if (res.ok) {
+        const { accessToken } = await res.json();
+        token.accessToken = accessToken;
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.accessToken = token.accessToken as string;
+
+      return session;
+    },
+  },
 };
 
 const hanlder = NextAuth(authOptions);

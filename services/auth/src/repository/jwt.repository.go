@@ -81,3 +81,23 @@ func ValidateJWT(tokenString string) (CustomClaims, error) {
 
 	return *claims, nil
 }
+
+func ValidateJWTNext(tokenString string) (CustomClaims, error) {
+	signinKey := []byte(config.GetEnv("JWT_SECRET"))
+
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return signinKey, nil
+	})
+
+	if err != nil {
+		return CustomClaims{}, err
+	}
+
+	claims, ok := token.Claims.(*CustomClaims)
+
+	if !ok {
+		return CustomClaims{}, err
+	}
+
+	return *claims, nil
+}

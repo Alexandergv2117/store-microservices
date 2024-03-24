@@ -51,25 +51,13 @@ export const authOptions: NextAuthOptions = {
           name: token.name,
           email: token.email,
         },
-        process.env.JWT_SECRET as string,
+        process.env.PRIVATE_KEY || '',
         {
-          expiresIn: '1m',
+          algorithm: 'RS256',
         },
       );
 
-      const res = await fetch(`${process.env.API_URL}/auth/generate`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          apikey: process.env.API_KEY || '',
-          authorization: `Bearer ${tokenSign}`,
-        },
-      });
-
-      if (res.ok) {
-        const { accessToken } = await res.json();
-        token.accessToken = accessToken;
-      }
+      token.accessToken = tokenSign;
 
       return token;
     },

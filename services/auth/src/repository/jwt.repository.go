@@ -1,10 +1,12 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/Alexandergv2117/store/src/config"
+	"github.com/Alexandergv2117/store/src/utils"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -82,11 +84,21 @@ func ValidateJWT(tokenString string) (CustomClaims, error) {
 	return *claims, nil
 }
 
-func ValidateJWTNext(tokenString string) (CustomClaims, error) {
-	signinKey := []byte(config.GetEnv("JWT_SECRET"))
+func ValidateJWTCustom(tokenString string) (CustomClaims, error) {
+	buffer, err := utils.ReadFromFile("public.pem")
+
+	if err != nil {
+		return CustomClaims{}, err
+	}
+
+	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(buffer)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return signinKey, nil
+		return verifyKey, nil
 	})
 
 	if err != nil {
@@ -96,7 +108,7 @@ func ValidateJWTNext(tokenString string) (CustomClaims, error) {
 	claims, ok := token.Claims.(*CustomClaims)
 
 	if !ok {
-		return CustomClaims{}, err
+		return CustomClaims{}, errors.New("no se pudo obtener los datos del token")
 	}
 
 	return *claims, nil

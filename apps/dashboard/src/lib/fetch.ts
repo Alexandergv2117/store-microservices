@@ -12,6 +12,7 @@ export const GET = async (url: string) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${await getToken()}`,
+      'X-Custom-Token': 'true',
     },
     cache: 'no-cache',
   });

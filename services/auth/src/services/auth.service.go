@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/Alexandergv2117/store/src/repository"
@@ -41,38 +40,28 @@ func ValidateToken(token string) (repository.CustomClaims, error) {
 	return repository.ValidateJWT(tokenWituotBearer)
 }
 
-func ValidateTokenNext(token string) (string, int, error) {
+func ValidateCustomToken(token string) (repository.UserRepository, int, error) {
 	parts := strings.Split(token, " ")
 
 	if len(parts) != 2 {
-		return "", 400, errors.New("token mal formado")
+		return repository.UserRepository{}, 400, errors.New("token mal formado")
 	}
 
 	tokenWituotBearer := parts[1]
 
-	data, err := repository.ValidateJWT(tokenWituotBearer)
-
-	fmt.Println(data)
-	fmt.Println(err)
+	user, err := repository.ValidateJWTCustom(tokenWituotBearer)
 
 	if err != nil {
-		return "", 400, errors.New("token invalido")
+		return repository.UserRepository{}, 400, errors.New("token invalido")
 	}
 
-	user, err := repository.GetUserByEmail(data.Email)
+	data, e := repository.GetUserByEmail("alexandergv2117@gmail.com")
 
-	if err != nil || user.Email == "" {
-		return "", 404, errors.New("email not found")
+	if e != nil || user.Email == "" {
+		return repository.UserRepository{}, 404, errors.New("email not found")
 	}
 
-	tokenSign := repository.SigninJWT(repository.CustomClaims{
-		Id:       user.ID,
-		Username: user.Username,
-		Email:    user.Email,
-		Role:     user.Role,
-	})
-
-	return tokenSign, 200, nil
+	return data, 200, nil
 }
 
 func RefreshToken(token string) (string, error) {

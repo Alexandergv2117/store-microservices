@@ -41,10 +41,29 @@ func Login(c *fiber.Ctx) error {
 func ValidateToken(c *fiber.Ctx) error {
 	token := c.Get("Authorization")
 
+	customToken := c.Get("X-Custom-Token")
+
 	if token == "" {
 		return c.Status(401).JSON(fiber.Map{
 			"message": "unauthorized",
 		})
+	}
+
+	if customToken != "" {
+		res, code, err := services.ValidateCustomToken(token)
+
+		if err != nil {
+			return c.Status(code).JSON(fiber.Map{
+				"message": err.Error(),
+			})
+		}
+
+		c.Set("x-user-id", res.ID)
+		c.Set("x-user-email", res.Email)
+		c.Set("x-user-username", res.Username)
+		c.Set("x-user-role", res.Role)
+
+		return c.JSON(res)
 	}
 
 	res, err := services.ValidateToken(token)

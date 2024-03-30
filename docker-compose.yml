@@ -41,12 +41,13 @@ services:
     networks:
       - store-network
     environment:
-      DB_HOST: postgres-db
-      DB_PORT: 5432
-      DB_USERNAME: admin
-      DB_PASSWORD: admin
-      DB_NAME: store_users
-      JWT_SECRET: secret
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME_USER}
+      JWT_SECRET: ${JWT_SECRET}
+      PUBLIC_KEY: ${PUBLIC_KEY}
 
   users:
     user: node
@@ -64,11 +65,11 @@ services:
     networks:
       - store-network
     environment:
-      DB_HOST: postgres-db
-      DB_PORT: 5432
-      DB_USERNAME: admin
-      DB_PASSWORD: admin
-      DB_NAME: store_users
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME_USER}
       DB_LOGGING: false
 
   products:
@@ -87,11 +88,11 @@ services:
     networks:
       - store-network
     environment:
-      DB_HOST: postgres-db
-      DB_PORT: 5432
-      DB_USERNAME: admin
-      DB_PASSWORD: admin
-      DB_NAME: store_products
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME_PRODUCT}
       DB_LOGGING: false
 
   # API Gateway

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Alexandergv2117/store/src/config"
-	"github.com/Alexandergv2117/store/src/utils"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -85,13 +84,9 @@ func ValidateJWT(tokenString string) (CustomClaims, error) {
 }
 
 func ValidateJWTCustom(tokenString string) (CustomClaims, error) {
-	buffer, err := utils.ReadFromFile("public.pem")
+	PUBLIC_KEY := []byte(config.GetEnv("PUBLIC_KEY"))
 
-	if err != nil {
-		return CustomClaims{}, err
-	}
-
-	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(buffer)
+	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(PUBLIC_KEY)
 
 	if err != nil {
 		fmt.Println(err)

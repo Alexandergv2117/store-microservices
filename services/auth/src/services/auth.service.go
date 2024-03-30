@@ -55,7 +55,7 @@ func ValidateCustomToken(token string) (repository.UserRepository, int, error) {
 		return repository.UserRepository{}, 400, errors.New("token invalido")
 	}
 
-	data, e := repository.GetUserByEmail("alexandergv2117@gmail.com")
+	data, e := repository.GetUserByEmail(user.Email)
 
 	if e != nil || user.Email == "" {
 		return repository.UserRepository{}, 404, errors.New("email not found")

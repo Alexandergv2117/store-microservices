@@ -56,7 +56,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./services/${{ steps.find_prefix_and_service.outputs.service }}
+          context: ./services/${{ steps.find_prefix_and_service.outputs.service }}/.
           file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/store-${{ steps.find_prefix_and_service.outputs.service }}:latest

@@ -40,3 +40,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Find prefix and service name
+        id: find_prefix_&_service
+        run: ./scripts/find_prefix_and_service.sh

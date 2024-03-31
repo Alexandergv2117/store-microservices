@@ -11,16 +11,20 @@ PREFIXE=""
 if [[ $COMMIT_MESSAGE =~ ^([a-zA-Z]+) ]]; then
   # El prefijo coincidente estará en la variable especial BASH_REMATCH
   PREFIXE=${BASH_REMATCH[1]}
-  echo "Prefijo encontrado: $PREFIXE"
+  # echo "Prefijo encontrado: $PREFIXE"
+  echo "::set-output name=prefixe::$PREFIXE"
 
   # Buscar el servicio dentro de los paréntesis
   if [[ $COMMIT_MESSAGE =~ \(.*\) ]]; then
     SERVICE=${BASH_REMATCH[0]:1:-1}
-    echo "Texto dentro de paréntesis: $SERVICE"
+    # echo "Texto dentro de paréntesis: $SERVICE"
+    echo "::set-output name=service::$SERVICE"
   else
-    echo "No se encontraron paréntesis en la cadena."
+    # echo "No se encontraron paréntesis en la cadena."
+    echo "::set-output name=service::"
   fi
 
 else
-  echo "No se encontró un prefijo antes del paréntesis en el mensaje del commit."
+  # echo "No se encontró un prefijo antes del paréntesis en el mensaje del commit."
+  echo "::set-output name=prefixe::"
 fi

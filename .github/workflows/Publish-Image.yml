@@ -47,6 +47,9 @@ jobs:
         name: Find prefix and service name
         id: find_prefix_and_service
         run: ./scripts/find_prefix_and_service.sh
+
+      - name: Echo prefix and service name
+        run: echo ${{ steps.find_prefix_and_service.outputs.prefixe }} ${{ steps.find_prefix_and_service.outputs.service }}
       
       - name: Build and push image to Docker Hub
         if : ${{ steps.find_prefix_and_service.outputs.prefixe == 'feat' && steps.find_prefix_and_service.outputs.service != ''}}

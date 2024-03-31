@@ -12,13 +12,13 @@ if [[ $COMMIT_MESSAGE =~ ^([a-zA-Z]+) ]]; then
   # El prefijo coincidente estará en la variable especial BASH_REMATCH
   PREFIXE=${BASH_REMATCH[1]}
   echo "Prefijo encontrado: $PREFIXE"
-  echo "prefixe=$PREFIXE" >> $GITHUB_STATE
+  echo "prefixe=$PREFIXE" >> $GITHUB_OUTPUT
 
   # Buscar el servicio dentro de los paréntesis
   if [[ $COMMIT_MESSAGE =~ \(.*\) ]]; then
     SERVICE=${BASH_REMATCH[0]:1:-1}
     echo "Texto dentro de paréntesis: $SERVICE"
-    echo "service=$SERVICE" >> $GITHUB_STATE
+    echo "service=$SERVICE" >> $GITHUB_OUTPUT
   else
     # echo "No se encontraron paréntesis en la cadena."
     echo "::set-output name=service::"

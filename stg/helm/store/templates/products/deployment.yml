@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: store-products
+  name: {{ printf "%s-deployment" .Values.store.service.products.name }}
+  labels:
+    app: {{ .Values.store.service.products.name }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.store.service.products.replicas }}
   selector:
     matchLabels:
-      app: store-products
+      app: {{ .Values.store.service.products.name }}
   template:
     metadata:
       labels:
-        app: store-products
+        app: {{ .Values.store.service.products.name }}
     spec:
       containers:
-        - name: store-products
-          image: alexandergv2117/store-products
+        - name: {{ .Values.store.service.products.name }}
+          image: {{ .Values.store.service.products.image }}
           ports:
-            - containerPort: 5300
+            - containerPort: {{ .Values.store.service.products.port }}
           env:
             - name: DB_HOST
-              value: "postgres-db"
+              value: {{ .Values.store.service.products.env.DB_HOST }}
             - name: DB_PORT
-              value: "5432"
+              value: "{{ .Values.store.service.products.env.DB_PORT }}"
             - name: DB_USERNAME
-              value: "admin"
+              value: {{ .Values.store.service.products.env.DB_USERNAME }}
             - name: DB_PASSWORD
-              value: "admin"
+              value: {{ .Values.store.service.products.env.DB_PASSWORD }}
             - name: DB_NAME
-              value: "store_products"
-            - name: DB_LOGGING
-              value: "false"
+              value: {{ .Values.store.service.products.env.DB_NAME }}

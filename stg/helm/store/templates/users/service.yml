@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: store-users
+  name: {{ printf "%s-service" .Values.store.service.users.name }}
   labels:
-    app: store-users
+    app: {{ .Values.store.service.users.name }}
 spec:
   selector:
-    app: store-users
+    app: {{ .Values.store.service.users.name }}
   ports:
     - protocol: TCP
-      port: 5200
-      targetPort: 5200
-  type: NodePort
+      port: {{ .Values.store.service.users.port }}
+      targetPort: {{ .Values.store.service.users.port }}
+  type: {{ .Values.store.service.users.type }}

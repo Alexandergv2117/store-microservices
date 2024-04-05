@@ -1,4 +1,51 @@
-postgresql:
-  auth:
-    password: "admin"
-    username: "admin"
+global:
+  postgresql:
+    auth:
+      username: "admin"
+      password: "admin"
+
+store:
+  service:
+    auth:
+      name: "store-auth"
+      port: 5000
+      type: NodePort
+      strategy: RollingUpdate
+      replicas: 2
+      image: "alexandergv2117/store-auth"
+      env:
+        DB_HOST: "store-postgresql"
+        DB_PORT: 5432
+        DB_USERNAME: "admin"
+        DB_PASSWORD: "admin"
+        DB_NAME: "postgres"
+        JWT_SECRET: "secret"
+        PUBLIC_KEY: ""
+
+    users:
+      name: "store-users"
+      port: 5200
+      type: NodePort
+      strategy: RollingUpdate
+      replicas: 1
+      image: "alexandergv2117/store-users"
+      env:
+        DB_HOST: "store-postgresql"
+        DB_PORT: 5432
+        DB_USERNAME: "admin"
+        DB_PASSWORD: "admin"
+        DB_NAME: "postgres"
+      
+    products:
+      name: "store-products"
+      port: 5300
+      type: NodePort
+      strategy: RollingUpdate
+      replicas: 2
+      image: "alexandergv2117/store-products"
+      env:
+        DB_HOST: "store-postgresql"
+        DB_PORT: 5432
+        DB_USERNAME: "admin"
+        DB_PASSWORD: "admin"
+        DB_NAME: "postgres"

@@ -7,27 +7,27 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: "*.store.local.com"
+    - host: "api.store.com"
       http:
         paths:
           - path: /auth
             pathType: Prefix
             backend:
               service:
-                name: store-auth-service
+                name: {{ printf "%s-service" .Values.store.service.auth.name }}
                 port:
-                  number: 5000
+                  number: {{ .Values.store.service.auth.port }}
           - path: /user
             pathType: Prefix
             backend:
               service:
-                name: store-users-service
+                name: {{ printf "%s-service" .Values.store.service.users.name }}
                 port:
-                  number: 5200
+                  number: {{ .Values.store.service.users.port }}
           - path: /product
             pathType: Prefix
             backend:
               service:
-                name: store-products-service
+                name: {{ printf "%s-service" .Values.store.service.products.name }}
                 port:
-                  number: 5300
+                  number: {{ .Values.store.service.products.port }}

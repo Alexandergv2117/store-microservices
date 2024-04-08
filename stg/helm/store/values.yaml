@@ -11,7 +11,7 @@ store:
       port: 5000
       type: NodePort
       strategy: RollingUpdate
-      replicas: 2
+      replicas: 1
       image: "alexandergv2117/store-auth"
       env:
         DB_HOST: "store-postgresql"
@@ -27,7 +27,7 @@ store:
       port: 5200
       type: NodePort
       strategy: RollingUpdate
-      replicas: 1
+      replicas: 2
       image: "alexandergv2117/store-users"
       env:
         DB_HOST: "store-postgresql"

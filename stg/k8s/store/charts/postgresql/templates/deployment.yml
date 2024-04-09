@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgresql
 spec:
-  replicas: 1
+  replicas: {{ .Values.global.postgresql.replicas }}
   selector:
     matchLabels:
       app: postgresql
@@ -16,11 +16,11 @@ spec:
     spec:
       containers:
         - name: postgresql
-          image: postgres:latest
+          image: {{ .Values.global.postgresql.image }}
           env:
             - name: POSTGRES_USER
-              value: admin
+              value: {{ .Values.global.postgresql.username }}
             - name: POSTGRES_PASSWORD
-              value: admin
+              value: {{ .Values.global.postgresql.password }}
             - name: POSTGRES_DB
-              value: postgres
+              value: {{ .Values.global.postgresql.database }}

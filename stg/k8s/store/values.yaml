@@ -1,4 +1,15 @@
-global:  
+global:
+  postgresql:
+    name: "postgresql-service"
+    type: NodePort
+    port: 5432
+    protocol: TCP
+    username: "admin"
+    password: "admin"
+    database: "postgres"
+    replicas: 5
+    image: "postgres:16.2"
+
   host:
     api: "api.store.com"
 

@@ -1,8 +1,6 @@
-global:
-  postgresql:
-    auth:
-      username: "admin"
-      password: "admin"
+global:  
+  host:
+    api: "api.store.com"
 
 store:
   service:
@@ -14,7 +12,7 @@ store:
       replicas: 1
       image: "alexandergv2117/store-auth"
       env:
-        DB_HOST: "store-postgresql"
+        DB_HOST: "postgresql-service"
         DB_PORT: 5432
         DB_USERNAME: "admin"
         DB_PASSWORD: "admin"
@@ -30,7 +28,7 @@ store:
       replicas: 2
       image: "alexandergv2117/store-users"
       env:
-        DB_HOST: "store-postgresql"
+        DB_HOST: "postgresql-service"
         DB_PORT: 5432
         DB_USERNAME: "admin"
         DB_PASSWORD: "admin"
@@ -44,7 +42,7 @@ store:
       replicas: 2
       image: "alexandergv2117/store-products"
       env:
-        DB_HOST: "store-postgresql"
+        DB_HOST: "postgresql-service"
         DB_PORT: 5432
         DB_USERNAME: "admin"
         DB_PASSWORD: "admin"

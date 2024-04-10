@@ -24,3 +24,13 @@ spec:
               value: {{ .Values.global.postgresql.password }}
             - name: POSTGRES_DB
               value: {{ .Values.global.postgresql.database }}
+            - name: extraDatabase
+              value: {{ .Values.global.postgresql.extraDatabase }}
+          volumeMounts:
+            - name: script-volume
+              mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+        - name: script-volume
+          configMap:
+            name: init-user-db
+            defaultMode: 0755

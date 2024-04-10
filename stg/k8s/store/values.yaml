@@ -7,8 +7,9 @@ global:
     username: "admin"
     password: "admin"
     database: "postgres"
-    replicas: 5
+    replicas: 1
     image: "postgres:16.2"
+    extraDatabase: "store_users,store_products"
 
   host:
     api: "api.store.com"
@@ -27,7 +28,7 @@ store:
         DB_PORT: 5432
         DB_USERNAME: "admin"
         DB_PASSWORD: "admin"
-        DB_NAME: "postgres"
+        DB_NAME: "store_users"
         JWT_SECRET: "secret"
         PUBLIC_KEY: ""
 
@@ -36,25 +37,25 @@ store:
       port: 5200
       type: NodePort
       strategy: RollingUpdate
-      replicas: 2
+      replicas: 1
       image: "alexandergv2117/store-users"
       env:
         DB_HOST: "postgresql-service"
         DB_PORT: 5432
         DB_USERNAME: "admin"
         DB_PASSWORD: "admin"
-        DB_NAME: "postgres"
+        DB_NAME: "store_users"
       
     products:
       name: "store-products"
       port: 5300
       type: NodePort
       strategy: RollingUpdate
-      replicas: 2
+      replicas: 1
       image: "alexandergv2117/store-products"
       env:
         DB_HOST: "postgresql-service"
         DB_PORT: 5432
         DB_USERNAME: "admin"
         DB_PASSWORD: "admin"
-        DB_NAME: "postgres"
+        DB_NAME: "store_products"

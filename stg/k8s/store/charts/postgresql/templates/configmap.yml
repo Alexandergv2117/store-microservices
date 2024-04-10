@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-user-db
+data:
+  create_extra_databases.sh: |
+    #!/bin/bash
+    set -e
+
+    IFS=',' read -ra databases <<< "$extraDatabase"
+
+    # Definir las líneas SQL para crear las bases de datos, usuarios y otorgar privilegios
+    sql_commands=""
+    for db in "${databases[@]}"; do
+      sql_commands+="CREATE DATABASE $db; "
+      sql_commands+="CREATE USER $db; "
+      sql_commands+="GRANT ALL PRIVILEGES ON DATABASE $db TO $db; "
+    done
+
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+      $sql_commands
+    EOSQL

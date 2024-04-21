@@ -1,5 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
+import { API_URL } from './env';
 
 export const getToken = async () => {
   const session = await getServerSession(authOptions);
@@ -7,7 +8,7 @@ export const getToken = async () => {
 };
 
 export const GET = async (url: string) => {
-  const res = await fetch(`${process.env.API_URL}${url}`, {
+  const res = await fetch(`${API_URL}${url}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

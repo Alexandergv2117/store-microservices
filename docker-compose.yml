@@ -50,7 +50,6 @@ services:
       PUBLIC_KEY: ${PUBLIC_KEY}
 
   users:
-    user: node
     container_name: store-users
     build:
       context: ./services/users
@@ -73,7 +72,6 @@ services:
       DB_LOGGING: false
 
   products:
-    user: node
     container_name: store-products
     build:
       context: ./services/products
@@ -106,3 +104,7 @@ services:
       - ./dev/nginx/:/etc/nginx/
     networks:
       - store-network
+    depends_on:
+      - auth
+      - users
+      - products

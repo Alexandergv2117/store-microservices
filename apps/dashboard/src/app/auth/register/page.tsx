@@ -1,10 +1,22 @@
 'use client';
 
 import { createUser } from '@/server/users/create';
-import { Button, Input } from '@nextui-org/react';
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@nextui-org/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 function RegisterPage() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [errorMessage, setErrorMessage] = useState({ title: '', message: '' });
   const {
     register,
     handleSubmit,
@@ -13,11 +25,43 @@ function RegisterPage() {
 
   const onSubmit = handleSubmit(async (data) => {
     const result = await createUser(data);
-    console.log(result);
+
+    if (!result) {
+      setErrorMessage({
+        title: 'oops! Something went wrong!',
+        message: 'User already exists',
+      });
+      onOpen();
+    } else {
+      setErrorMessage({
+        title: 'Success!',
+        message: 'User created successfully!',
+      });
+      onOpen();
+    }
   });
 
   return (
     <div className="flex items-center flex-col">
+      <Modal size="lg" isOpen={isOpen} onClose={onClose}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                {errorMessage.title}
+              </ModalHeader>
+              <ModalBody>
+                <p>{errorMessage.message}</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
       <h1>Register</h1>
       <form
         onSubmit={onSubmit}
@@ -45,6 +89,13 @@ function RegisterPage() {
           {...register('lastname', { required: true })}
         />
         <Input
+          type="text"
+          label="Image"
+          isInvalid={!!errors.image}
+          errorMessage={errors.image && 'Image is required'}
+          {...register('image', { required: true })}
+        />
+        <Input
           type="email"
           label="Email"
           isInvalid={!!errors.email}
@@ -59,6 +110,13 @@ function RegisterPage() {
           {...register('phone', { required: true })}
         />
         <Input
+          type="text"
+          label="Role"
+          isInvalid={!!errors.role}
+          errorMessage={errors.role && 'Role is required'}
+          {...register('role', { required: true })}
+        />
+        <Input
           type="password"
           label="Password"
           minLength={8}
@@ -67,17 +125,6 @@ function RegisterPage() {
             errors.password && 'Password is required or password is too short'
           }
           {...register('password', { required: true })}
-        />
-        <Input
-          type="password"
-          label="Confirm Password"
-          minLength={8}
-          isInvalid={!!errors['confirm-password']}
-          errorMessage={
-            errors['confirm-password'] &&
-            'Confirm password is required or confirm password is too short'
-          }
-          {...register('confirm-password', { required: true })}
         />
         <Button type="submit" color="primary" variant="ghost">
           Register

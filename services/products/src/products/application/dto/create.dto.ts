@@ -62,6 +62,5 @@ export class CreateProductDto {
   })
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
-  @IsUUID('all', { each: true })
   category: string[];
 }

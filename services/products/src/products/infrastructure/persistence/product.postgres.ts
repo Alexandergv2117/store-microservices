@@ -43,8 +43,8 @@ export class ProductRepositoryPostgres implements IProductsRepository {
 
       if (categories.length > 0) {
         for await (const category of categories) {
-          const categoryFound = await this.categoryRepository.findById({
-            id: category,
+          const categoryFound = await this.categoryRepository.findByCategory({
+            category,
           });
 
           if (!categoryFound) {

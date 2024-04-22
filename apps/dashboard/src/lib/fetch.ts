@@ -22,3 +22,19 @@ export const GET = async (url: string) => {
 
   return data;
 };
+
+export const POST = async (url: string, data: unknown) => {
+  const res = await fetch(`${API_URL}${url}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${await getToken()}`,
+      'X-Custom-Token': 'true',
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await res.json();
+
+  return result;
+};

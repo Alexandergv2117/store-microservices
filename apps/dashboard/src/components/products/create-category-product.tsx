@@ -95,6 +95,7 @@ export function CreateCategoryProduct() {
     if (res.status !== 201) {
       setMessage('Something went wrong');
     }
+    setMessage('');
     onCloseProduct();
   });
 
@@ -118,6 +119,7 @@ export function CreateCategoryProduct() {
       setMessage('Something went wrong');
     }
 
+    setMessage('');
     onCloseCategory();
   });
 

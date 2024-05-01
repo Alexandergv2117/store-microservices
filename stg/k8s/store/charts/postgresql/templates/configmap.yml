@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: init-user-db
+  namespace: {{ .Values.global.namespace }}
 data:
   create_extra_databases.sh: |
     #!/bin/bash

@@ -4,6 +4,7 @@ metadata:
   name: postgresql-deployment
   labels:
     app: postgresql
+  namespace: {{ .Values.global.namespace }}
 spec:
   replicas: {{ .Values.global.postgresql.replicas }}
   selector:

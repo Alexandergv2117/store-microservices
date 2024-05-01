@@ -4,6 +4,7 @@ metadata:
   name: {{ printf "%s-service" .Values.store.service.auth.name }}
   labels:
     app: {{ .Values.store.service.auth.name }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: {{ .Values.store.service.auth.name }}

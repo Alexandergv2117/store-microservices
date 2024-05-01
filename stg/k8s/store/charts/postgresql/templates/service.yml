@@ -4,6 +4,7 @@ metadata:
   name: {{ .Values.global.postgresql.name }}
   labels:
     app: postgresql
+  namespace: {{ .Values.global.namespace }}
 spec:
   selector:
     app: postgresql

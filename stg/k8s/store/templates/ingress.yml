@@ -4,6 +4,9 @@ metadata:
   name: store-ingress
   labels:
     name: store-ingress
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "http://$host/auth/validate"
 spec:
   ingressClassName: nginx
   rules:

@@ -4,6 +4,7 @@ metadata:
   name: {{ printf "%s-deployment" .Values.store.service.users.name }}
   labels:
     app: {{ .Values.store.service.users.name }}
+  namespace: {{ .Values.global.namespace }}
 spec:
   replicas: {{ .Values.store.service.users.replicas }}
   selector:

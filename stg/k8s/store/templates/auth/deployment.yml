@@ -1,23 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ printf "%s-deployment" .Values.store.service.auth.name }}
+  namespace: {{ .Values.global.namespace }}
+  name: {{ .Values.store.service.auth.name }}
   labels:
     app: {{ .Values.store.service.auth.name }}
-  namespace: {{ .Values.global.namespace }}
 spec:
   replicas: {{ .Values.store.service.auth.replicas }}
   selector:
     matchLabels:
       app: {{ .Values.store.service.auth.name }}
+      role: {{ .Values.store.service.auth.name }}
   template:
     metadata:
       labels:
         app: {{ .Values.store.service.auth.name }}
+        role: {{ .Values.store.service.auth.name }}
     spec:
       containers:
         - name: {{ .Values.store.service.auth.name }}
           image: {{ .Values.store.service.auth.image }}
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{ .Values.store.service.auth.port }}
           env:
@@ -35,3 +38,10 @@ spec:
               value: {{ .Values.store.service.auth.env.JWT_SECRET }}
             - name: PUBLIC_KEY
               value: {{ .Values.store.service.auth.env.PUBLIC_KEY }}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "200m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"

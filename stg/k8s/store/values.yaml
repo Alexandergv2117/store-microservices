@@ -1,5 +1,5 @@
 global:
-  namespace: "store-stg"
+  namespace: "store"
   postgresql:
     name: "postgresql-service"
     type: NodePort
@@ -22,7 +22,10 @@ store:
       port: 5000
       type: NodePort
       strategy: RollingUpdate
-      replicas: 1
+      replicas: 3
+      minReplicas: 1
+      maxReplicas: 10
+      cpuUtilization: 80
       image: "alexandergv2117/store-auth"
       env:
         DB_HOST: "postgresql-service"
@@ -38,7 +41,10 @@ store:
       port: 5200
       type: NodePort
       strategy: RollingUpdate
-      replicas: 1
+      replicas: 3
+      minReplicas: 1
+      maxReplicas: 10
+      cpuUtilization: 80
       image: "alexandergv2117/store-users"
       env:
         DB_HOST: "postgresql-service"
@@ -52,7 +58,10 @@ store:
       port: 5300
       type: NodePort
       strategy: RollingUpdate
-      replicas: 1
+      replicas: 3
+      minReplicas: 1
+      maxReplicas: 10
+      cpuUtilization: 80
       image: "alexandergv2117/store-products"
       env:
         DB_HOST: "postgresql-service"

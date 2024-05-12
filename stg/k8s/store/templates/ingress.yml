@@ -2,11 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: {{ .Values.global.namespace }}
-  name: store-ingress
+  name: {{ .Values.global.ingress.name }}
   labels:
-    name: store-ingress
+    name: {{ .Values.global.ingress.name }}
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: {{ printf "http://%s-service.%s.svc.cluster.local:%s/auth/validate" .Values.store.service.auth.name .Values.global.namespace (toString .Values.store.service.auth.port) }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.global.ingress.ingressClassName }}
   rules:
     - host: {{ .Values.global.host.api }}	
       http:

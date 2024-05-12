@@ -14,6 +14,10 @@ global:
 
   host:
     api: "api.store.com"
+
+  ingress:
+    name: "store-ingress"
+    ingressClassName: "nginx"
   
 store:
   service:
@@ -22,7 +26,7 @@ store:
       port: 5000
       type: NodePort
       strategy: RollingUpdate
-      replicas: 3
+      replicas: 1
       minReplicas: 1
       maxReplicas: 10
       cpuUtilization: 80

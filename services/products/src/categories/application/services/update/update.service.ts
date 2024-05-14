@@ -3,17 +3,17 @@ import {
   IUpdateCategoryService,
   IUpdateOneCategoryService,
 } from './update.interface';
-import { CategoriesRepositoryPostgres } from 'src/categories/infrastructure/persistence/categories.postgres';
-import { ICategoriesRepository } from 'src/categories/domain/categories.repository';
+import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
+import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 
 @Injectable()
 export class UpdateCategoryService implements IUpdateCategoryService {
   constructor(
-    @Inject(CategoriesRepositoryPostgres)
-    private readonly categoryRepository: ICategoriesRepository,
+    @Inject(CategoryRepositoryPostgres)
+    private readonly categoryRepository: CategoryRepository,
   ) {}
   async updateOne({ id, category }: IUpdateOneCategoryService): Promise<void> {
-    const exists = await this.categoryRepository.findById({ id });
+    const exists = await this.categoryRepository.findCategoryById({ id });
 
     if (!exists) {
       throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
@@ -22,12 +22,12 @@ export class UpdateCategoryService implements IUpdateCategoryService {
     exists.category = category.category || exists.category;
     exists.description = category.description || exists.description;
 
-    const result = await this.categoryRepository.update({
+    const result = await this.categoryRepository.updateCategory({
       id,
       category: exists,
     });
 
-    if (result.affected === 0) {
+    if (!result) {
       throw new HttpException('Category not updated', HttpStatus.BAD_REQUEST);
     }
 

@@ -1,28 +1,31 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+
 import {
   IDeleteCategoryService,
   IDeleteOneCateforyService,
 } from './delete.interface';
-import { CategoriesRepositoryPostgres } from 'src/categories/infrastructure/persistence/categories.postgres';
-import { ICategoriesRepository } from 'src/categories/domain/categories.repository';
+import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
+import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
 
 @Injectable()
 export class DeleteCategoryService implements IDeleteCategoryService {
   constructor(
-    @Inject(CategoriesRepositoryPostgres)
-    private readonly categoryRepository: ICategoriesRepository,
+    @Inject(CategoryRepositoryPostgres)
+    private readonly categoryRepository: CategoryRepository,
   ) {}
 
   async deleteOne({ id }: IDeleteOneCateforyService): Promise<void> {
-    const existsCategory = await this.categoryRepository.findById({ id });
+    const existsCategory = await this.categoryRepository.findCategoryById({
+      id,
+    });
 
     if (!existsCategory) {
       throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
     }
 
-    const deleteCategory = await this.categoryRepository.delete({ id });
+    const deleteCategory = await this.categoryRepository.deleteCategory({ id });
 
-    if (deleteCategory.affected === 0) {
+    if (!deleteCategory) {
       throw new HttpException('Category not deleted', HttpStatus.BAD_REQUEST);
     }
 

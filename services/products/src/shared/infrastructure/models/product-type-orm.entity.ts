@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
-import { ProductsCategoriesEntity } from './products_categories.entity';
+import { ProductsCategoriesEntity } from './products-categories.entity';
 
 export enum Currency {
   USD = 'USD',

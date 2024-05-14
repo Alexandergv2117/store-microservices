@@ -1,0 +1,12 @@
+.git/
+node_modules/
+
+.gitignore
+.env
+.env.example
+Dockerfile
+nodemon.json
+private.pem
+public.pem
+package.json
+package-lock.json

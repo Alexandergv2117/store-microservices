@@ -1,8 +1,18 @@
 FROM golang:latest as builder
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y nodejs
-RUN apt install npm -y
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y nodejs npm
+
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+WORKDIR /srv
+
+EXPOSE 5000
+
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \

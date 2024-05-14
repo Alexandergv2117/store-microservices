@@ -1,0 +1,160 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Values.global.namespace }}
+  name: nginx-http-cm
+data:
+  nginx.conf: |
+    user nginx;
+
+    worker_processes 1;
+
+    events {
+      worker_connections  10240;
+    }
+
+    http {
+      map $http_apikey $api_client_name {
+        default "";
+
+        "cgRsROk8khb0f+LL8N1J1MZc" "client_one";
+      }
+
+      # Auth service
+      upstream auth {
+        least_conn;
+        server {{ .Values.store.service.auth.name }}-service.store.svc.cluster.local:{{ .Values.store.service.auth.port }};
+      }
+
+      # Product service
+      upstream products {
+        least_conn;
+        server {{ .Values.store.service.products.name }}-service.store.svc.cluster.local:{{ .Values.store.service.products.port }};
+      }
+
+      # User service
+      upstream users {
+        least_conn;
+        server {{ .Values.store.service.users.name }}-service.store.svc.cluster.local:{{ .Values.store.service.users.port }};
+      }
+
+      # RATE LIMITING
+      limit_req_zone
+        $binary_remote_addr
+        zone=mylimit:10m
+        rate=10r/s;
+
+      server {
+        listen       80;
+        server_name  _;
+
+        # Authentication by nginx
+
+        location = /protected {
+          internal;
+          if ($request_method = OPTIONS) {
+            add_header 'Access-Control-Allow-Origin' $http_origin;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'Origin, X-Requested-With, Content-Type, Accept, Authorization';
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            add_header 'Content-Length' 0;
+            return 204;
+          }
+
+          rewrite ^ /auth/validate break;
+          proxy_pass_request_body off;
+          proxy_set_header Content-Length "";
+          proxy_set_header X-Original-URI $request_uri;
+          proxy_pass http://auth;
+        }
+
+        location = /_validate_apikey {
+          internal;
+
+          if ($http_apikey = "") {
+            return 401; # Unauthorized
+          }
+          if ($api_client_name = "") {
+            return 403; # Forbidden
+          }
+
+          return 204; # OK (no content)
+        }
+
+        # SERVICE ROUTING
+
+        location /auth {
+          auth_request /_validate_apikey;
+          proxy_set_header Origin $http_origin;
+
+          location /auth/login {
+            limit_req zone=mylimit;
+            rewrite ^ /auth/login break;
+            proxy_pass http://auth;
+          }
+
+          location /auth/generate {
+            # limit_req zone=mylimit;
+            rewrite ^ /auth/generate break;
+            proxy_pass http://auth;
+          }
+
+          location /auth/refresh* {
+            limit_req zone=mylimit;
+            rewrite ^ /auth/refresh break;
+            proxy_pass http://auth;
+          }
+
+          location /auth/validate {
+            rewrite ^ /auth/validate break;
+            proxy_pass http://auth;
+          }
+
+          return 404 '{"error": "Not Found"}';
+        }
+
+         # Product service
+
+        location /product {
+          auth_request /protected;
+          proxy_pass http://products;
+        }
+
+        # User service
+
+        location /user {
+          auth_request /protected;
+          proxy_pass http://users;
+        }
+
+        location /user/user/public {
+          proxy_pass http://users;
+        }
+
+        error_page 401 = @error401;
+        error_page 403 = @error403;
+        error_page 500 = @error500;
+        error_page 503 = @error503;
+
+        location @error401 {
+          default_type application/json;
+          return 401 '{"error": "Unauthorized"}';
+        }
+
+        location @error403 {
+          default_type application/json;
+          return 403 '{"error": "Forbidden"}';
+        }
+
+        location @error500 {
+          default_type application/json;
+          return 500 '{"error": "Internal Server Error"}';
+        }
+
+        location @error503 {
+          default_type application/json;
+          return 503 '{"error": "Service Unavailable"}';
+        }
+      }
+    }

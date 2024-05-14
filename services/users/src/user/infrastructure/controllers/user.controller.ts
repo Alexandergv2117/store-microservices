@@ -39,7 +39,7 @@ export class UserController {
     private readonly deleteService: IDeleteUserService,
   ) {}
 
-  @Post()
+  @Post('public')
   async create(@Body() newUser: CreateUserDto) {
     return await this.createService.create(newUser);
   }

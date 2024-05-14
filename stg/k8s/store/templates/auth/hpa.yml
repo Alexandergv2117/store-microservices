@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  namespace: {{ .Values.global.namespace }}
+  name: {{ .Values.store.service.auth.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.store.service.auth.name }}
+  minReplicas: {{ .Values.store.service.auth.minReplicas }}
+  maxReplicas: {{ .Values.store.service.auth.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.store.service.auth.cpuUtilization}}

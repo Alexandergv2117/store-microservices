@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.global.namespace }}
+  name: {{ .Values.store.service.users.name }}
+  labels:
+    app: {{ .Values.store.service.users.name }}
+spec:
+  replicas: {{ .Values.store.service.users.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.store.service.users.name }}
+      role: {{ .Values.store.service.users.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.store.service.users.name }}
+        role: {{ .Values.store.service.users.name }}
+    spec:
+      containers:
+        - name: {{ .Values.store.service.users.name }}
+          image: {{ .Values.store.service.users.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.store.service.users.port }}
+          env:
+            - name: DB_HOST
+              value: {{ .Values.store.service.users.env.DB_HOST }}
+            - name: DB_PORT
+              value: "{{ .Values.store.service.users.env.DB_PORT }}"
+            - name: DB_USERNAME
+              value: {{ .Values.store.service.users.env.DB_USERNAME }}
+            - name: DB_PASSWORD
+              value: {{ .Values.store.service.users.env.DB_PASSWORD }}
+            - name: DB_NAME
+              value: {{ .Values.store.service.users.env.DB_NAME }}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "200m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"

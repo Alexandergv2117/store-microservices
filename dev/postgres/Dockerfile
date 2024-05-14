@@ -4,6 +4,6 @@ ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=store
 
-COPY init.sql /docker-entrypoint-initdb.d/
+COPY backup.sh /docker-entrypoint-initdb.d/
 
 EXPOSE 5432

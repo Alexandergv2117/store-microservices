@@ -1,0 +1,75 @@
+global:
+  namespace: "store"
+  postgresql:
+    name: "postgresql-service"
+    type: NodePort
+    port: 5432
+    protocol: TCP
+    username: "admin"
+    password: "admin"
+    database: "postgres"
+    replicas: 1
+    image: "postgres:16.2"
+    extraDatabase: "store_users,store_products"
+
+  host:
+    api: "api.store.com"
+
+  ingress:
+    name: "store-ingress"
+    ingressClassName: "nginx"
+  
+store:
+  service:
+    auth:
+      name: "store-auth"
+      port: 5000
+      type: NodePort
+      strategy: RollingUpdate
+      replicas: 1
+      minReplicas: 1
+      maxReplicas: 10
+      cpuUtilization: 80
+      image: "alexandergv2117/store-auth"
+      env:
+        DB_HOST: "postgresql-service"
+        DB_PORT: 5432
+        DB_USERNAME: "admin"
+        DB_PASSWORD: "admin"
+        DB_NAME: "store_users"
+        JWT_SECRET: "secret"
+        PUBLIC_KEY: "-----BEGIN PUBLIC KEY----- MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA+yUkonzsXu3CIQn6czy8 /1js/Ut6FAGtOCnbPNKZltwWZOMzNnQGUvtDUqMZ92n/tW6zAa/3Fe/23K8fSj+c TmcyiDhJPRw6Mei8/mimHxT+vut/tWakA+GBFtwc8eQUNzvtkxz8RvhNPKTHLo7s lpWNPcSb+cA4MfW0aqpe5b1QX9F37h6FI9oU2hthp188Qqb+4Fh3USTho2IG9IHG HDtuTqqXU/h5bkeBt0B+PbeNdb8Vrqd2Ruu2PlMVCv/CvV0L7Xm0ClUybt/ry9BS 99GDN81AuBGLvyHBaufbyelhAW2mpiNu8FVOhpoXjUdheoiYLFoNg3mKu85BjydA JwIDAQAB -----END PUBLIC KEY-----"
+
+    users:
+      name: "store-users"
+      port: 5200
+      type: NodePort
+      strategy: RollingUpdate
+      replicas: 3
+      minReplicas: 1
+      maxReplicas: 10
+      cpuUtilization: 80
+      image: "alexandergv2117/store-users"
+      env:
+        DB_HOST: "postgresql-service"
+        DB_PORT: 5432
+        DB_USERNAME: "admin"
+        DB_PASSWORD: "admin"
+        DB_NAME: "store_users"
+      
+    products:
+      name: "store-products"
+      port: 5300
+      type: NodePort
+      strategy: RollingUpdate
+      replicas: 3
+      minReplicas: 1
+      maxReplicas: 10
+      cpuUtilization: 80
+      image: "alexandergv2117/store-products"
+      env:
+        DB_HOST: "postgresql-service"
+        DB_PORT: 5432
+        DB_USERNAME: "admin"
+        DB_PASSWORD: "admin"
+        DB_NAME: "store_products"

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-deployment
+  labels:
+    app: postgresql
+  namespace: {{ .Values.global.namespace }}
+spec:
+  replicas: {{ .Values.global.postgresql.replicas }}
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+        - name: postgresql
+          image: {{ .Values.global.postgresql.image }}
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.global.postgresql.username }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.global.postgresql.password }}
+            - name: POSTGRES_DB
+              value: {{ .Values.global.postgresql.database }}
+            - name: extraDatabase
+              value: {{ .Values.global.postgresql.extraDatabase }}
+          volumeMounts:
+            - name: script-volume
+              mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+        - name: script-volume
+          configMap:
+            name: init-user-db
+            defaultMode: 0755

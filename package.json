@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "This is a store online, implement microservices, docker, terraform, kubernetes and AWS",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "husky install"
   },
   "keywords": [
     "AWS",
@@ -76,6 +76,8 @@
     ]
   },
   "devDependencies": {
+    "@commitlint/cli": "19.2.1",
+    "@commitlint/config-conventional": "19.1.0",
     "@typescript-eslint/eslint-plugin": "7.1.0",
     "@typescript-eslint/parser": "7.1.0",
     "eslint": "8.57.0",

@@ -94,8 +94,12 @@ export default function Products({ products }: ProductsProps) {
     }
   }, []);
 
+  if (!products) {
+    return <p>No products found</p>;
+  }
+
   return (
-    <section className="w-8/12">
+    <section className="w-8/12 mt-4">
       <Table aria-label="Example table with custom cells">
         <TableHeader columns={columns}>
           {(column) => (

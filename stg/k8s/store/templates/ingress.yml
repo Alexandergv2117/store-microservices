@@ -5,32 +5,16 @@ metadata:
   name: {{ .Values.global.ingress.name }}
   labels:
     name: {{ .Values.global.ingress.name }}
-  annotations:
-    nginx.ingress.kubernetes.io/auth-url: {{ printf "http://%s-service.%s.svc.cluster.local:%s/auth/validate" .Values.store.service.auth.name .Values.global.namespace (toString .Values.store.service.auth.port) }}
 spec:
   ingressClassName: {{ .Values.global.ingress.ingressClassName }}
   rules:
     - host: {{ .Values.global.host.api }}	
       http:
         paths:
-          - path: /auth
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ printf "%s-service" .Values.store.service.auth.name }}
+                name: nginx-http-svc
                 port:
-                  number: {{ .Values.store.service.auth.port }}
-          - path: /user
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ printf "%s-service" .Values.store.service.users.name }}
-                port:
-                  number: {{ .Values.store.service.users.port }}
-          - path: /product
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ printf "%s-service" .Values.store.service.products.name }}
-                port:
-                  number: {{ .Values.store.service.products.port }}
+                  number: 30080

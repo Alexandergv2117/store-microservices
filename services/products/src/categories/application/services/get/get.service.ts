@@ -4,13 +4,13 @@ import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
 import { Category } from 'src/shared/domain/entities/category.entity';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
-import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/env';
 import { IGetCategoriesService } from './get.interface';
 
 @Injectable()
 export class GetCategoryService implements IGetCategoriesService {
   constructor(
-    @Inject(CategoryRepositoryPostgres)
+    @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: CategoryRepository,
   ) {}
 

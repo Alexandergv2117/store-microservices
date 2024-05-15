@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
-import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/env';
 import {
   IDeleteCategoryService,
   IDeleteOneCateforyService,
@@ -10,7 +10,7 @@ import {
 @Injectable()
 export class DeleteCategoryService implements IDeleteCategoryService {
   constructor(
-    @Inject(CategoryRepositoryPostgres)
+    @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: CategoryRepository,
   ) {}
 

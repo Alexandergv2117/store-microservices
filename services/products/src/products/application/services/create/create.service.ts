@@ -5,7 +5,7 @@ import { Product } from 'src/shared/domain/entities/product.entity';
 import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
 import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
-import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/env';
 import { ICreateProductService } from './create.interface';
 import { CreateProductDto } from '../../dto/create.dto';
 
@@ -14,7 +14,7 @@ export class CreateProductService implements ICreateProductService {
   constructor(
     @Inject(ProductRepositoryPostgres)
     private readonly productRepository: ProductRepository,
-    @Inject(CategoryRepositoryPostgres)
+    @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: CategoryRepository,
   ) {}
 

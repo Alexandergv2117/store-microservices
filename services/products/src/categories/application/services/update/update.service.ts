@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+
+import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
+import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
 import {
   IUpdateCategoryService,
   IUpdateOneCategoryService,
 } from './update.interface';
-import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
-import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 
 @Injectable()
 export class UpdateCategoryService implements IUpdateCategoryService {

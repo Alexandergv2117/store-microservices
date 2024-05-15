@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
-import { IGetCategoriesService } from './get.interface';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
-import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
-import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 import { Category } from 'src/shared/domain/entities/category.entity';
+import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
+import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
+import { IGetCategoriesService } from './get.interface';
 
 @Injectable()
 export class GetCategoryService implements IGetCategoriesService {

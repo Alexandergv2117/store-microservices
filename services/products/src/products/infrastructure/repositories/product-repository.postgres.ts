@@ -1,12 +1,12 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 
-import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
-import { Product } from 'src/shared/domain/entities/product.entity';
-import { ProductsEntity } from 'src/shared/infrastructure/models/product-type-orm.entity';
-import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
+import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
+import { Product } from 'src/shared/domain/entities/product.entity';
 import { CategoriesEntity } from 'src/shared/infrastructure/models/category-type-orm.entity';
+import { ProductsEntity } from 'src/shared/infrastructure/models/product-type-orm.entity';
+import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
 
 export class ProductRepositoryPostgres implements ProductRepository {
   constructor(

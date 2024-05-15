@@ -5,8 +5,8 @@ import { Like, Repository } from 'typeorm';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { Category } from 'src/shared/domain/entities/category.entity';
-import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 import { CategoriesEntity } from 'src/shared/infrastructure/models/category-type-orm.entity';
+import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 
 @Injectable()
 export class CategoryRepositoryPostgres implements CategoryRepository {

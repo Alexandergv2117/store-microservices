@@ -10,6 +10,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+
+import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
+import { SearchDTO } from 'src/shared/application/dto/search.dto';
 import { CreateCategoryDto } from 'src/categories/application/dto/create.dto';
 import { GetIdCategoryDTO } from 'src/categories/application/dto/get.dto';
 import { UpdateCategoryDTO } from 'src/categories/application/dto/update.dto';
@@ -21,8 +24,6 @@ import { IGetCategoriesService } from 'src/categories/application/services/get/g
 import { GetCategoryService } from 'src/categories/application/services/get/get.service';
 import { IUpdateCategoryService } from 'src/categories/application/services/update/update.interface';
 import { UpdateCategoryService } from 'src/categories/application/services/update/update.service';
-import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
-import { SearchDTO } from 'src/shared/application/dto/search.dto';
 
 @Controller('category')
 @ApiTags('Category')

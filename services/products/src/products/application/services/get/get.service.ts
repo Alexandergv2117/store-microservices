@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { IGetProductService } from './get.interface';
+
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
+import { Product } from 'src/shared/domain/entities/product.entity';
 import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
 import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
-import { Product } from 'src/shared/domain/entities/product.entity';
+import { IGetProductService } from './get.interface';
 
 @Injectable()
 export class GetProductService implements IGetProductService {

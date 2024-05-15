@@ -7,6 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+
 import { Currency } from 'src/shared/domain/entities/product.entity';
 
 export class CreateProductDto {

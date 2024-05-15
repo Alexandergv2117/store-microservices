@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 
-import { ICreateProductService } from './create.interface';
-import { CreateProductDto } from '../../dto/create.dto';
+import { Product } from 'src/shared/domain/entities/product.entity';
 import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
 import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
-import { Product } from 'src/shared/domain/entities/product.entity';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
+import { ICreateProductService } from './create.interface';
+import { CreateProductDto } from '../../dto/create.dto';
 
 @Injectable()
 export class CreateProductService implements ICreateProductService {
@@ -17,6 +17,7 @@ export class CreateProductService implements ICreateProductService {
     @Inject(CategoryRepositoryPostgres)
     private readonly categoryRepository: CategoryRepository,
   ) {}
+
   async create(product: CreateProductDto): Promise<Product> {
     const existsCategory = await this.categoryRepository.findCategoryByName({
       category: product.category,

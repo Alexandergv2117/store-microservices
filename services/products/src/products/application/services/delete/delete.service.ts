@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+
+import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
+import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
 import {
   IDeleteOneProductService,
   IDeleteProductService,
 } from './delete.interface';
-import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
-import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
 
 @Injectable()
 export class DeleteProductService implements IDeleteProductService {

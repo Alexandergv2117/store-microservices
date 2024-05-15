@@ -1,6 +1,6 @@
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
-import { Product } from '../../../shared/domain/entities/product.entity';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
+import { Product } from '../../../shared/domain/entities/product.entity';
 
 export interface ProductRepository {
   createProduct(data: {

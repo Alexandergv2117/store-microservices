@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 
-import { ICreateCategoryService } from './create.interface';
-import { CreateCategoryDto } from '../../dto/create.dto';
+import { Category } from 'src/shared/domain/entities/category.entity';
 import { getfield } from 'src/shared/infrastructure/utils/error';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
-import { Category } from 'src/shared/domain/entities/category.entity';
+import { ICreateCategoryService } from './create.interface';
+import { CreateCategoryDto } from '../../dto/create.dto';
 
 @Injectable()
 export class CreateCategoryService implements ICreateCategoryService {

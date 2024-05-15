@@ -21,9 +21,9 @@ else
 fi
 
 # Restaurar db2
-psql -U $POSTGRES_USER -d store_products -f ./backup/backup_products.sql
-if [ $? -eq 0 ]; then
-  echo "La restauración de la base de datos store_products fue exitosa."
-else
-  echo "Error: No se pudo restaurar la base de datos store_products."
-fi
+# psql -U $POSTGRES_USER -d store_products -f ./backup/backup_products.sql
+# if [ $? -eq 0 ]; then
+#   echo "La restauración de la base de datos store_products fue exitosa."
+# else
+#   echo "Error: No se pudo restaurar la base de datos store_products."
+# fi

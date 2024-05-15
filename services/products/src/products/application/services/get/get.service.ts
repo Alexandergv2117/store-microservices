@@ -1,28 +1,28 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { IProductsRepository } from 'src/products/domain/product.repository';
-import { ProductRepositoryPostgres } from 'src/products/infrastructure/persistence/product.postgres';
 import { IGetProductService } from './get.interface';
-import { ProductsEntity } from 'src/products/domain/entities/product.entity';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
+import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
+import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
+import { Product } from 'src/shared/domain/entities/product.entity';
 
 @Injectable()
 export class GetProductService implements IGetProductService {
   constructor(
     @Inject(ProductRepositoryPostgres)
-    private readonly productRepository: IProductsRepository,
+    private readonly productRepository: ProductRepository,
   ) {}
   async getAll({ limit, page, search }: PaginationDTO & SearchDTO): Promise<{
-    data: ProductsEntity[];
+    data: Product[];
     total: number;
   }> {
-    const [data, total] = await this.productRepository.findAll({
+    const [data, total] = await this.productRepository.findAllProducts({
       limit,
       page,
       search,
     });
 
-    if (total === 0) {
+    if (!total) {
       throw new HttpException('No products found', HttpStatus.NOT_FOUND);
     }
 
@@ -31,8 +31,8 @@ export class GetProductService implements IGetProductService {
       total,
     };
   }
-  async getOneById({ id }: { id: string }): Promise<ProductsEntity> {
-    const product = await this.productRepository.findById({ id });
+  async getOneById({ id }: { id: string }): Promise<Product> {
+    const product = await this.productRepository.findProductById({ id });
 
     if (!product) {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);

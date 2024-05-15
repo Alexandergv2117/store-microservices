@@ -1,31 +1,43 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { ICreateProductService } from './create.interface';
-import { ProductsEntity } from 'src/products/domain/entities/product.entity';
-import { CreateProductDto } from '../../dto/create.dto';
-import { IProductsRepository } from 'src/products/domain/product.repository';
-import { ProductRepositoryPostgres } from 'src/products/infrastructure/persistence/product.postgres';
 import { uuidv7 } from 'uuidv7';
+
+import { ICreateProductService } from './create.interface';
+import { CreateProductDto } from '../../dto/create.dto';
+import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
+import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
+import { Product } from 'src/shared/domain/entities/product.entity';
+import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
+import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
 
 @Injectable()
 export class CreateProductService implements ICreateProductService {
   constructor(
     @Inject(ProductRepositoryPostgres)
-    private readonly productRepository: IProductsRepository,
+    private readonly productRepository: ProductRepository,
+    @Inject(CategoryRepositoryPostgres)
+    private readonly categoryRepository: CategoryRepository,
   ) {}
-  async create(product: CreateProductDto): Promise<ProductsEntity> {
-    const newProduct = new ProductsEntity();
-    newProduct.id = product.id || uuidv7();
-    newProduct.name = product.name;
-    newProduct.description = product.description;
-    newProduct.image = product.image;
-    newProduct.price = product.price;
-    newProduct.currency = product.currency;
-    newProduct.stock = product.stock;
-    newProduct.published = product.published;
+  async create(product: CreateProductDto): Promise<Product> {
+    const existsCategory = await this.categoryRepository.findCategoryByName({
+      category: product.category,
+    });
 
-    const productSaved = await this.productRepository.create({
-      product: newProduct,
-      categories: product.category,
+    if (!existsCategory) {
+      throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+    }
+
+    const productSaved = await this.productRepository.createProduct({
+      product: {
+        id: product.id || uuidv7(),
+        category: existsCategory,
+        currency: product.currency,
+        description: product.description,
+        image: product.image,
+        name: product.name,
+        price: product.price,
+        published: product.published,
+        stock: product.stock,
+      },
     });
 
     if ('message' in productSaved) {

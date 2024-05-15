@@ -1,25 +1,17 @@
 import { Global, Module } from '@nestjs/common';
-import { ProductsEntity } from './domain/entities/product.entity';
-import { ProductsCategoriesEntity } from './domain/entities/products_categories.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductController } from './infrastructure/controllers/product.controller';
 import { CreateProductService } from './application/services/create/create.service';
 import { GetProductService } from './application/services/get/get.service';
 import { UpdateService } from './application/services/update/update.service';
 import { DeleteProductService } from './application/services/delete/delete.service';
-import { ProductRepositoryPostgres } from './infrastructure/persistence/product.postgres';
-import { ProductsCategoriesPostgres } from './infrastructure/persistence/productCategory.postgres';
-import { CategoriesEntity } from 'src/categories/domain/entities/categories.entity';
+import { ProductRepositoryPostgres } from './infrastructure/repositories/product-repository.postgres';
+import { CategoriesEntity } from 'src/shared/infrastructure/models/category-type-orm.entity';
+import { ProductsEntity } from 'src/shared/infrastructure/models/product-type-orm.entity';
 
 @Global()
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      ProductsEntity,
-      ProductsCategoriesEntity,
-      CategoriesEntity,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([ProductsEntity, CategoriesEntity])],
   controllers: [ProductController],
   providers: [
     CreateProductService,
@@ -27,8 +19,7 @@ import { CategoriesEntity } from 'src/categories/domain/entities/categories.enti
     UpdateService,
     DeleteProductService,
     ProductRepositoryPostgres,
-    ProductsCategoriesPostgres,
   ],
-  exports: [ProductRepositoryPostgres, ProductsCategoriesPostgres],
+  exports: [ProductRepositoryPostgres],
 })
 export class ProductsModule {}

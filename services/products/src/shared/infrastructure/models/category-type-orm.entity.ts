@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
-import { ProductsCategoriesEntity } from './products-categories.entity';
+import { ProductsEntity } from './product-type-orm.entity';
 
 @Entity({ name: 'categories' })
 export class CategoriesEntity {
@@ -12,13 +12,6 @@ export class CategoriesEntity {
   @Column({ type: 'varchar', nullable: false })
   description: string;
 
-  @OneToMany(
-    () => ProductsCategoriesEntity,
-    (productCategory) => productCategory.category,
-    {
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    },
-  )
-  productCategory: ProductsCategoriesEntity[];
+  @OneToMany(() => ProductsEntity, (product) => product.category)
+  products: ProductsEntity[];
 }

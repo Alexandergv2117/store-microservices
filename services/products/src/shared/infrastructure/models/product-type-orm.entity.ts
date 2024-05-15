@@ -1,10 +1,6 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
-import { ProductsCategoriesEntity } from './products-categories.entity';
-
-export enum Currency {
-  USD = 'USD',
-  MXN = 'MXN',
-}
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Currency } from 'src/shared/domain/entities/product.entity';
+import { CategoriesEntity } from './category-type-orm.entity';
 
 @Entity({ name: 'products' })
 export class ProductsEntity {
@@ -32,10 +28,7 @@ export class ProductsEntity {
   @Column({ type: 'bool', nullable: false, default: true })
   published: boolean;
 
-  @OneToMany(
-    () => ProductsCategoriesEntity,
-    (productCategory) => productCategory.product,
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE' },
-  )
-  productCategory: ProductsCategoriesEntity[];
+  @ManyToOne(() => CategoriesEntity, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
+  category: CategoriesEntity;
 }

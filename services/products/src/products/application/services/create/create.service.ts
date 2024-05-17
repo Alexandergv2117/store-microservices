@@ -2,17 +2,19 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { uuidv7 } from 'uuidv7';
 
 import { Product } from 'src/shared/domain/entities/product.entity';
-import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
+import {
+  CATEGORY_REPOSITORY,
+  PRODUCTS_REPOSITORY,
+} from 'src/shared/infrastructure/config/repository';
 import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
-import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/env';
 import { ICreateProductService } from './create.interface';
 import { CreateProductDto } from '../../dto/create.dto';
 
 @Injectable()
 export class CreateProductService implements ICreateProductService {
   constructor(
-    @Inject(ProductRepositoryPostgres)
+    @Inject(PRODUCTS_REPOSITORY)
     private readonly productRepository: ProductRepository,
     @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: CategoryRepository,

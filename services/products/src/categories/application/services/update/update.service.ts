@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
-import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/env';
 import {
   IUpdateCategoryService,
   IUpdateOneCategoryService,

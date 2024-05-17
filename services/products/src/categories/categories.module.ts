@@ -1,19 +1,12 @@
 import { Global, Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 import { GetCategoryService } from './application/services/get/get.service';
 import { DeleteCategoryService } from './application/services/delete/delete.service';
 import { CreateCategoryService } from './application/services/create/create.service';
 import { UpdateCategoryService } from './application/services/update/update.service';
-import { CategoriesEntity } from 'src/shared/infrastructure/models/category-type-orm.entity';
 import { CategoryController } from './infrastructure/controllers/category.controller';
-
-import { CATEGORY_REPOSITORY, DB_TYPE } from 'src/shared/infrastructure/env';
-
-const ORM =
-  DB_TYPE === 'relacional'
-    ? TypeOrmModule.forFeature([CategoriesEntity])
-    : null;
+import { ORM } from 'src/shared/infrastructure/config/orm';
 
 @Global()
 @Module({

@@ -1,5 +1,3 @@
-import { CategoryRepositoryPostgres } from 'src/categories/infrastructure/repositories/category-repository.postgres';
-
 export type DbType = 'relacional' | 'nosql';
 
 export const PORT = parseInt(process.env.PORT, 10) || 5300;
@@ -12,8 +10,3 @@ export const DB_NAME = process.env.DB_NAME || '';
 export const DB_LOGGING = process.env.DB_LOGGING === 'true';
 // export const DB_TYPE: DbType = (process.env.DB_TYPE as DbType) || 'relacional';
 export const DB_TYPE: DbType = 'relacional';
-
-export const PRODUCT_REPOSITORY = 'PRODUCT_REPOSITORY';
-
-export const CATEGORY_REPOSITORY =
-  DB_TYPE === 'relacional' ? CategoryRepositoryPostgres : null;

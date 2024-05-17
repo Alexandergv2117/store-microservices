@@ -3,8 +3,8 @@ import { uuidv7 } from 'uuidv7';
 
 import { Category } from 'src/shared/domain/entities/category.entity';
 import { getfield } from 'src/shared/infrastructure/utils/error';
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
-import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/env';
 import { ICreateCategoryService } from './create.interface';
 import { CreateCategoryDto } from '../../dto/create.dto';
 

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
+import { PRODUCTS_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
-import { ProductRepositoryPostgres } from 'src/products/infrastructure/repositories/product-repository.postgres';
 import {
   IDeleteOneProductService,
   IDeleteProductService,
@@ -10,7 +10,7 @@ import {
 @Injectable()
 export class DeleteProductService implements IDeleteProductService {
   constructor(
-    @Inject(ProductRepositoryPostgres)
+    @Inject(PRODUCTS_REPOSITORY)
     private readonly productRepository: ProductRepository,
   ) {}
   async deleteOne({ id }: IDeleteOneProductService): Promise<void> {

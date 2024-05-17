@@ -3,8 +3,8 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
 import { Category } from 'src/shared/domain/entities/category.entity';
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
-import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/env';
 import { IGetCategoriesService } from './get.interface';
 
 @Injectable()

@@ -9,6 +9,8 @@ export interface CategoryRepository {
   ): Promise<[Category[], number]>;
   findCategoryById(data: { id: string }): Promise<Category>;
   findCategoryByName(data: { category: string }): Promise<Category>;
+  findCategotiesByIds(data: { ids: string[] }): Promise<Category[]>;
+  findCategoriesByNames(data: { categories: string[] }): Promise<Category[]>;
   updateCategory(data: { id: string; category: Category }): Promise<Category>;
   deleteCategory(data: { id: string }): Promise<boolean>;
 }

@@ -9,10 +9,17 @@ import { GetProductService } from './application/services/get/get.service';
 import { CreateProductService } from './application/services/create/create.service';
 import { ProductRepositoryPostgres } from './infrastructure/repositories/product-repository.postgres';
 import { ProductController } from './infrastructure/controllers/product.controller';
+import { ProductsCategoriesEntity } from 'src/shared/infrastructure/models/product-category-type-orm.entity';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductsEntity, CategoriesEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      ProductsEntity,
+      CategoriesEntity,
+      ProductsCategoriesEntity,
+    ]),
+  ],
   controllers: [ProductController],
   providers: [
     CreateProductService,

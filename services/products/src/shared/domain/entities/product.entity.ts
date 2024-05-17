@@ -13,7 +13,7 @@ export class Product {
   public currency: Currency;
   public stock: number;
   public published: boolean;
-  public category: Category;
+  public categories: Category[];
   public price: string;
 
   constructor(
@@ -25,7 +25,7 @@ export class Product {
     stock: number,
     price: string,
     published: boolean,
-    category: Category,
+    categories: Category[],
   ) {
     this.id = id;
     this.name = name;
@@ -34,7 +34,7 @@ export class Product {
     this.currency = currency;
     this.stock = stock;
     this.published = published;
-    this.category = category;
+    this.categories = categories;
     this.price = price;
   }
 }

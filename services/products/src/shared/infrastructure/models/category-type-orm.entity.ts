@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
-import { ProductsEntity } from './product-type-orm.entity';
+import { ProductsCategoriesEntity } from './product-category-type-orm.entity';
 
 @Entity({ name: 'categories' })
 export class CategoriesEntity {
@@ -12,6 +12,9 @@ export class CategoriesEntity {
   @Column({ type: 'varchar', nullable: false })
   description: string;
 
-  @OneToMany(() => ProductsEntity, (product) => product.category)
-  products: ProductsEntity[];
+  @OneToMany(
+    () => ProductsCategoriesEntity,
+    (productCategory) => productCategory.category,
+  )
+  products: ProductsCategoriesEntity[];
 }

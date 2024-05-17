@@ -1,6 +1,6 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 import { Currency } from 'src/shared/domain/entities/product.entity';
-import { CategoriesEntity } from './category-type-orm.entity';
+import { ProductsCategoriesEntity } from './product-category-type-orm.entity';
 
 @Entity({ name: 'products' })
 export class ProductsEntity {
@@ -28,7 +28,12 @@ export class ProductsEntity {
   @Column({ type: 'bool', nullable: false, default: true })
   published: boolean;
 
-  @ManyToOne(() => CategoriesEntity, (category) => category.products)
-  @JoinColumn({ name: 'category_id' })
-  category: CategoriesEntity;
+  @OneToMany(
+    () => ProductsCategoriesEntity,
+    (productCategory) => productCategory.product,
+    {
+      cascade: true,
+    },
+  )
+  categories: ProductsCategoriesEntity[];
 }

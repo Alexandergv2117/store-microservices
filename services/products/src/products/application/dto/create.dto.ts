@@ -58,9 +58,10 @@ export class CreateProductDto {
 
   @ApiProperty({
     type: 'string',
+    isArray: true,
     description: 'Producrt category',
   })
-  @IsString()
   @IsNotEmpty()
-  category: string;
+  @IsString({ each: true })
+  categories: string[];
 }

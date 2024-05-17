@@ -14,6 +14,40 @@ export class CategoryRepositoryPostgres implements CategoryRepository {
     @InjectRepository(CategoriesEntity)
     private readonly categoryRepository: Repository<CategoriesEntity>,
   ) {}
+  findCategotiesByIds({ ids }: { ids: string[] }): Promise<Category[]> {
+    const categories: Category[] = [];
+
+    ids.forEach(async (id) => {
+      const category = await this.categoryRepository.findOne({
+        where: { id },
+      });
+      if (category) {
+        categories.push(category);
+      }
+    });
+
+    return Promise.resolve(categories);
+  }
+
+  async findCategoriesByNames({
+    categories,
+  }: {
+    categories: string[];
+  }): Promise<Category[]> {
+    const categoriesFound: Category[] = [];
+
+    for (const category of categories) {
+      const categoryFound = await this.categoryRepository.findOne({
+        where: { category },
+      });
+      if (categoryFound) {
+        categoriesFound.push(categoryFound);
+      }
+    }
+
+    return Promise.resolve(categoriesFound);
+  }
+
   findCategoryByName({ category }: { category: string }): Promise<Category> {
     return this.categoryRepository.findOne({
       where: { category },

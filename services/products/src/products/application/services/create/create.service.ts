@@ -19,8 +19,8 @@ export class CreateProductService implements ICreateProductService {
   ) {}
 
   async create(product: CreateProductDto): Promise<Product> {
-    const existsCategory = await this.categoryRepository.findCategoryByName({
-      category: product.category,
+    const existsCategory = await this.categoryRepository.findCategoriesByNames({
+      categories: product.categories,
     });
 
     if (!existsCategory) {
@@ -30,7 +30,7 @@ export class CreateProductService implements ICreateProductService {
     const productSaved = await this.productRepository.createProduct({
       product: {
         id: product.id || uuidv7(),
-        category: existsCategory,
+        categories: existsCategory,
         currency: product.currency,
         description: product.description,
         image: product.image,

@@ -1,27 +1,28 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+
+import { PRODUCTS_REPOSITORY } from 'src/shared/infrastructure/config/repository';
+import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
 import {
   IDeleteOneProductService,
   IDeleteProductService,
 } from './delete.interface';
-import { IProductsRepository } from 'src/products/domain/product.repository';
-import { ProductRepositoryPostgres } from 'src/products/infrastructure/persistence/product.postgres';
 
 @Injectable()
 export class DeleteProductService implements IDeleteProductService {
   constructor(
-    @Inject(ProductRepositoryPostgres)
-    private readonly productRepository: IProductsRepository,
+    @Inject(PRODUCTS_REPOSITORY)
+    private readonly productRepository: ProductRepository,
   ) {}
   async deleteOne({ id }: IDeleteOneProductService): Promise<void> {
-    const existsProduct = await this.productRepository.findById({ id });
+    const existsProduct = await this.productRepository.findProductById({ id });
 
     if (!existsProduct) {
       throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
     }
 
-    const deleteProduct = await this.productRepository.delete({ id });
+    const deleteProduct = await this.productRepository.deleteProduct({ id });
 
-    if (deleteProduct.affected === 0) {
+    if (!deleteProduct) {
       throw new HttpException('Product not deleted', HttpStatus.BAD_REQUEST);
     }
 

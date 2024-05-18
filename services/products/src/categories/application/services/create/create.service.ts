@@ -1,21 +1,22 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { uuidv7 } from 'uuidv7';
+
+import { Category } from 'src/shared/domain/entities/category.entity';
+import { getfield } from 'src/shared/infrastructure/utils/error';
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/config/repository';
+import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 import { ICreateCategoryService } from './create.interface';
 import { CreateCategoryDto } from '../../dto/create.dto';
-import { CategoriesRepositoryPostgres } from 'src/categories/infrastructure/persistence/categories.postgres';
-import { ICategoriesRepository } from 'src/categories/domain/categories.repository';
-import { CategoriesEntity } from 'src/categories/domain/entities/categories.entity';
-import { uuidv7 } from 'uuidv7';
-import { getfield } from 'src/shared/infrastructure/utils/error';
 
 @Injectable()
 export class CreateCategoryService implements ICreateCategoryService {
   constructor(
-    @Inject(CategoriesRepositoryPostgres)
-    private readonly categoryRepository: ICategoriesRepository,
+    @Inject(CATEGORY_REPOSITORY)
+    private readonly categoryRepository: CategoryRepository,
   ) {}
 
-  async create(category: CreateCategoryDto): Promise<CategoriesEntity> {
-    const existsCategory = await this.categoryRepository.findByCategory({
+  async create(category: CreateCategoryDto): Promise<Category> {
+    const existsCategory = await this.categoryRepository.findCategoryByName({
       category: category.category,
     });
 
@@ -23,15 +24,17 @@ export class CreateCategoryService implements ICreateCategoryService {
       throw new HttpException('Category already exists', HttpStatus.CONFLICT);
     }
 
-    const newCategory = new CategoriesEntity();
-
-    newCategory.id = category.id || uuidv7();
-    newCategory.category = category.category;
-    newCategory.description = category.description;
+    const newCategory = new Category(
+      category.id || uuidv7(),
+      category.category,
+      category.description,
+    );
 
     try {
-      await this.categoryRepository.create(newCategory);
-      return await this.categoryRepository.findById({ id: newCategory.id });
+      await this.categoryRepository.createCategory({ category: newCategory });
+      return await this.categoryRepository.findCategoryById({
+        id: newCategory.id,
+      });
     } catch (error) {
       if (error.code === '23505') {
         console.log(error.detail);

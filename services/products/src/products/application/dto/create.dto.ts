@@ -7,7 +7,8 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { Currency } from 'src/products/domain/entities/product.entity';
+
+import { Currency } from 'src/shared/domain/entities/product.entity';
 
 export class CreateProductDto {
   @ApiProperty({ type: 'string', description: 'Product id' })
@@ -60,7 +61,7 @@ export class CreateProductDto {
     isArray: true,
     description: 'Producrt category',
   })
+  @IsNotEmpty()
   @IsString({ each: true })
-  @IsNotEmpty({ each: true })
-  category: string[];
+  categories: string[];
 }

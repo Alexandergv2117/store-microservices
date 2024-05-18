@@ -1,12 +1,6 @@
-import { Entity, PrimaryColumn, Column, OneToOne, OneToMany } from 'typeorm';
-import { DetailsEntity } from 'src/details/domain/entities/details.entity';
-import { ImagesEntity } from 'src/images/domain/entities/images.entity';
-import { ProductsCategoriesEntity } from './products_categories.entity';
-
-export enum Currency {
-  USD = 'USD',
-  MXN = 'MXN',
-}
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { Currency } from 'src/shared/domain/entities/product.entity';
+import { ProductsCategoriesEntity } from './product-category-type-orm.entity';
 
 @Entity({ name: 'products' })
 export class ProductsEntity {
@@ -34,22 +28,12 @@ export class ProductsEntity {
   @Column({ type: 'bool', nullable: false, default: true })
   published: boolean;
 
-  @OneToOne(() => DetailsEntity, (details) => details.product, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  details: DetailsEntity;
-
-  @OneToMany(() => ImagesEntity, (image) => image.product, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  images: ImagesEntity[];
-
   @OneToMany(
     () => ProductsCategoriesEntity,
     (productCategory) => productCategory.product,
-    { onDelete: 'CASCADE', onUpdate: 'CASCADE' },
+    {
+      cascade: true,
+    },
   )
-  productCategory: ProductsCategoriesEntity[];
+  categories: ProductsCategoriesEntity[];
 }

@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
-import { ProductsCategoriesEntity } from 'src/products/domain/entities/products_categories.entity';
+import { ProductsCategoriesEntity } from './product-category-type-orm.entity';
 
 @Entity({ name: 'categories' })
 export class CategoriesEntity {
@@ -15,10 +15,6 @@ export class CategoriesEntity {
   @OneToMany(
     () => ProductsCategoriesEntity,
     (productCategory) => productCategory.category,
-    {
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    },
   )
-  productCategory: ProductsCategoriesEntity[];
+  products: ProductsCategoriesEntity[];
 }

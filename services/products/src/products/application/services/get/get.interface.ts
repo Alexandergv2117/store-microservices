@@ -1,12 +1,12 @@
-import { ProductsEntity } from 'src/products/domain/entities/product.entity';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
+import { Product } from 'src/shared/domain/entities/product.entity';
 
 export interface IGetProductService {
   getAll(query: PaginationDTO & SearchDTO): Promise<{
-    data: ProductsEntity[];
+    data: Product[];
     total: number;
   }>;
 
-  getOneById({ id }: { id: string }): Promise<ProductsEntity>;
+  getOneById({ id }: { id: string }): Promise<Product>;
 }

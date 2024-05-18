@@ -1,24 +1,24 @@
 import { Global, Module } from '@nestjs/common';
-import { CategoryController } from './infrastructure/controllers/category.controller';
-import { CategoriesEntity } from './domain/entities/categories.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { CATEGORY_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 import { GetCategoryService } from './application/services/get/get.service';
-import { CategoriesRepositoryPostgres } from './infrastructure/persistence/categories.postgres';
 import { DeleteCategoryService } from './application/services/delete/delete.service';
 import { CreateCategoryService } from './application/services/create/create.service';
 import { UpdateCategoryService } from './application/services/update/update.service';
+import { CategoryController } from './infrastructure/controllers/category.controller';
+import { ORM } from 'src/shared/infrastructure/config/orm';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([CategoriesEntity])],
+  imports: [ORM],
   controllers: [CategoryController],
   providers: [
     GetCategoryService,
-    CategoriesRepositoryPostgres,
+    CATEGORY_REPOSITORY,
     DeleteCategoryService,
     CreateCategoryService,
     UpdateCategoryService,
   ],
-  exports: [CategoriesRepositoryPostgres],
+  exports: [CATEGORY_REPOSITORY],
 })
 export class CategoriesModule {}

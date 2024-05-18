@@ -2,10 +2,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { NODE_ENV, PORT } from './shared/infrastructure/env';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+import { NODE_ENV, PORT } from './shared/infrastructure/env';
+import { AppModule } from './app.module';
 
 const NAME = 'Products service';
 const GLOBAL_PREFIX = 'product';

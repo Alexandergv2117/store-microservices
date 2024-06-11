@@ -10,6 +10,7 @@ variable "secret_key" {
 
 variable "region" {
   type = string
+  default = "us-west-1"
   description = "AWS region"
 }
 

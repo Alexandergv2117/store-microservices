@@ -22,7 +22,16 @@ module.exports = {
     'scope-enum': [
       2,
       'always',
-      ['root', 'auth', 'products', 'users', 'dashboard', 'gateway', 'k8s'],
+      [
+        'root',
+        'auth',
+        'products',
+        'users',
+        'dashboard',
+        'gateway',
+        'k8s',
+        'infra',
+      ],
     ],
     'header-max-length': [2, 'always', 100],
     'header-case': [2, 'always', 'lower-case'],

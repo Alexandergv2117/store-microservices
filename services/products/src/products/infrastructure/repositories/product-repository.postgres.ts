@@ -15,7 +15,6 @@ export class ProductRepositoryPostgres implements ProductRepository {
     @InjectRepository(ProductsCategoriesEntity)
     private readonly productCategoryRepository: Repository<ProductsCategoriesEntity>,
   ) {}
-
   async createProduct({
     product,
   }: {
@@ -71,6 +70,31 @@ export class ProductRepositoryPostgres implements ProductRepository {
     });
 
     return product as unknown as Product;
+  }
+
+  async updateProduct({
+    id,
+    product,
+  }: {
+    id: string;
+    product: Product;
+  }): Promise<Product> {
+    try {
+      const updateProduct = await this.productRepository.save({
+        id,
+        name: product.name,
+        description: product.description,
+        image: product.image,
+        price: product.price,
+        currency: product.currency,
+        stock: product.stock,
+        published: product.published,
+      });
+
+      return updateProduct as unknown as Product;
+    } catch (error) {
+      return null;
+    }
   }
 
   async deleteProduct({ id }: { id: string }): Promise<boolean> {

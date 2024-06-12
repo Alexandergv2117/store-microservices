@@ -1,4 +1,12 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
 import { Currency } from 'src/shared/domain/entities/product.entity';
 import { ProductsCategoriesEntity } from './product-category-type-orm.entity';
 
@@ -36,4 +44,10 @@ export class ProductsEntity {
     },
   )
   categories: ProductsCategoriesEntity[];
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
 }

@@ -89,11 +89,19 @@ export class CategoryRepositoryPostgres implements CategoryRepository {
     category: Category;
   }): Promise<Category> {
     try {
-      const updatedCategory = await this.categoryRepository.update(
-        id,
-        category,
-      );
-      return updatedCategory.affected > 0 ? category : null;
+      const existingCategory = await this.categoryRepository.findOne({
+        where: { id },
+      });
+      if (!existingCategory) {
+        return null;
+      }
+
+      this.categoryRepository.merge(existingCategory, category);
+
+      const updatedCategory =
+        await this.categoryRepository.save(existingCategory);
+
+      return updatedCategory;
     } catch (error) {
       return null;
     }

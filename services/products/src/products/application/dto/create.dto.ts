@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -11,7 +12,7 @@ import {
 import { Currency } from 'src/shared/domain/entities/product.entity';
 
 export class CreateProductDto {
-  @ApiProperty({ type: 'string', description: 'Product id' })
+  @ApiProperty({ type: 'string', description: 'Product id', required: false })
   @IsOptional()
   @IsString()
   @IsUUID()
@@ -27,11 +28,6 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({ type: 'string', description: 'Product image' })
-  @IsString()
-  @IsNotEmpty()
-  image: string;
-
   @ApiProperty({ type: 'string', description: 'Product price' })
   @IsString()
   @IsNotEmpty()
@@ -46,12 +42,14 @@ export class CreateProductDto {
   @IsNotEmpty()
   currency: Currency;
 
-  @ApiProperty({ type: 'number', description: 'Product stock' })
+  @ApiProperty({ description: 'Product stock', type: Number })
+  @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   stock: number;
 
-  @ApiProperty({ type: 'boolean', description: 'Product published' })
+  @ApiProperty({ type: Boolean, description: 'Product published' })
+  @Type(() => Boolean)
   @IsBoolean()
   @IsNotEmpty()
   published: boolean;
@@ -64,4 +62,12 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsString({ each: true })
   categories: string[];
+
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'Product image',
+    required: true,
+  })
+  image: Express.Multer.File;
 }

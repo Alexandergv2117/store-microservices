@@ -35,7 +35,7 @@ export class CreateProductService implements ICreateProductService {
         categories: existsCategory,
         currency: product.currency,
         description: product.description,
-        image: product.image,
+        image: '',
         name: product.name,
         price: product.price,
         published: product.published,

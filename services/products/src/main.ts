@@ -18,6 +18,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({ origin: '*' });
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true, // Opcional, para eliminar propiedades que no están en el DTO
+    }),
+  );
+
   if (NODE_ENV === 'development') {
     const config = new DocumentBuilder()
       .setTitle(NAME)

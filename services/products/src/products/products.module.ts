@@ -1,7 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 
 import { ORM } from 'src/shared/infrastructure/config/orm';
-import { PRODUCTS_REPOSITORY } from 'src/shared/infrastructure/config/repository';
+import {
+  PRODUCTS_REPOSITORY,
+  UPLOAD_IMAGE_REPOSITORY,
+} from 'src/shared/infrastructure/config/repository';
 import { UpdateService } from './application/services/update/update.service';
 import { DeleteProductService } from './application/services/delete/delete.service';
 import { GetProductService } from './application/services/get/get.service';
@@ -18,6 +21,7 @@ import { ProductController } from './infrastructure/controllers/product.controll
     UpdateService,
     DeleteProductService,
     PRODUCTS_REPOSITORY,
+    UPLOAD_IMAGE_REPOSITORY,
   ],
   exports: [PRODUCTS_REPOSITORY],
 })

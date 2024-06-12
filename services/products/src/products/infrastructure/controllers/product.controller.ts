@@ -1,4 +1,4 @@
-import { ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -8,6 +8,8 @@ import {
   Param,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { GetIdDTO } from 'src/shared/application/dto/getId.dto';
@@ -20,8 +22,11 @@ import { IDeleteProductService } from 'src/products/application/services/delete/
 import { DeleteProductService } from 'src/products/application/services/delete/delete.service';
 import { IGetProductService } from 'src/products/application/services/get/get.interface';
 import { GetProductService } from 'src/products/application/services/get/get.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileTypePipe } from 'src/shared/application/dto/pipes/files.validator.pipe';
+import { validImg } from 'src/shared/infrastructure/utils/validFiles';
 
-@Controller('product')
+@Controller('')
 @ApiTags('Product')
 export class ProductController {
   constructor(
@@ -32,9 +37,16 @@ export class ProductController {
     @Inject(DeleteProductService)
     private readonly deleteService: IDeleteProductService,
   ) {}
+
   @Post()
-  async create(@Body() product: CreateProductDto) {
-    return await this.createService.create(product);
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @Body() product: CreateProductDto,
+    @UploadedFile(new FileTypePipe(validImg.extensions, validImg.mimeTypes))
+    image: Express.Multer.File,
+  ) {
+    return await this.createService.create({ ...product, image });
   }
 
   @Get()
@@ -53,12 +65,6 @@ export class ProductController {
   async findById(@Param() { id }: GetIdDTO) {
     return await this.getService.getOneById({ id });
   }
-
-  // TODO: Implement update method
-  // @Put(':id')
-  // async update() {
-  //   return 'Update product';
-  // }
 
   @Delete(':id')
   async delete(@Param() { id }: GetIdDTO) {

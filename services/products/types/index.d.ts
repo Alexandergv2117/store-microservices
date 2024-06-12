@@ -8,5 +8,9 @@ declare namespace NodeJS {
     DB_PASSWORD: string;
     DB_NAME: string;
     DB_LOGGING: 'true' | 'false';
+    AWS_BUCKET_NAME_IMAGE: string;
+    AWS_BUCKET_NAME_REGION: string;
+    AWS_PUBLIC_KEY: string;
+    AWS_SECRET_KEY: string;
   }
 }

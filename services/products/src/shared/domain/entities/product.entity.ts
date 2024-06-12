@@ -15,6 +15,8 @@ export class Product {
   public published: boolean;
   public categories: Category[];
   public price: string;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 
   constructor(
     id: string,

@@ -16,4 +16,5 @@ export interface ProductRepository {
     product: Product;
     categories: string[];
   }): Promise<boolean>;
+  addCategories(data: { product: Product }): Promise<boolean>;
 }

@@ -34,6 +34,8 @@ import { UpdateProductService } from 'src/products/application/services/update-p
 import { IUpdateProductService } from 'src/products/application/services/update-product/update-product.interface';
 import { DeleteCategoriesService } from 'src/products/application/services/delete-categories/delete-categories.service';
 import { IDeleteCategoriesServices } from 'src/products/application/services/delete-categories/delete-categories.interface';
+import { AddCategoriesService } from 'src/products/application/services/add-categories/add-categories.service';
+import { IAddCategoriesService } from 'src/products/application/services/add-categories/add-categories.interface';
 
 @Controller('')
 @ApiTags('Product')
@@ -47,6 +49,8 @@ export class ProductController {
     private readonly deleteService: IDeleteProductService,
     @Inject(DeleteCategoriesService)
     private readonly deleteCategoriesService: IDeleteCategoriesServices,
+    @Inject(AddCategoriesService)
+    private readonly addCategoriesService: IAddCategoriesService,
     @Inject(UpdateProductService)
     private readonly updateProductService: IUpdateProductService,
   ) {}
@@ -91,6 +95,17 @@ export class ProductController {
     return await this.updateProductService.updateProduct({
       productId: id,
       updateProduct: { ...product, image },
+    });
+  }
+
+  @Put(':id/category')
+  async addCategory(
+    @Param() { id }: GetIdDTO,
+    @Body() { categories }: GetIdCategoryDTO,
+  ) {
+    return await this.addCategoriesService.addCategoriesToProduct({
+      id,
+      categories,
     });
   }
 

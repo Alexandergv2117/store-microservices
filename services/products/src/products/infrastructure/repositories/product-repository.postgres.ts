@@ -97,6 +97,22 @@ export class ProductRepositoryPostgres implements ProductRepository {
     }
   }
 
+  async addCategories({ product }: { product: Product }): Promise<boolean> {
+    try {
+      console.log(product.categories);
+      for (const category of product.categories) {
+        await this.productCategoryRepository.save({
+          product: product as unknown as ProductsEntity,
+          category,
+        });
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   async deleteProduct({ id }: { id: string }): Promise<boolean> {
     const result = await this.productRepository.delete(id);
     return result.affected > 0;

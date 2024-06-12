@@ -11,6 +11,7 @@ import { CreateProductService } from './application/services/create/create.servi
 import { ProductController } from './infrastructure/controllers/product.controller';
 import { UpdateProductService } from './application/services/update-product/update-product.service';
 import { DeleteCategoriesService } from './application/services/delete-categories/delete-categories.service';
+import { AddCategoriesService } from './application/services/add-categories/add-categories.service';
 
 @Global()
 @Module({
@@ -24,6 +25,7 @@ import { DeleteCategoriesService } from './application/services/delete-categorie
     UPLOAD_IMAGE_REPOSITORY,
     UpdateProductService,
     DeleteCategoriesService,
+    AddCategoriesService,
   ],
   exports: [PRODUCTS_REPOSITORY],
 })

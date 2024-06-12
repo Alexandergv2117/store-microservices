@@ -7,6 +7,7 @@ import { DeleteProductService } from './application/services/delete/delete.servi
 import { GetProductService } from './application/services/get/get.service';
 import { CreateProductService } from './application/services/create/create.service';
 import { ProductController } from './infrastructure/controllers/product.controller';
+import { ImageRepository } from 'src/shared/infrastructure/repository/file.repository';
 
 @Global()
 @Module({
@@ -18,6 +19,7 @@ import { ProductController } from './infrastructure/controllers/product.controll
     UpdateService,
     DeleteProductService,
     PRODUCTS_REPOSITORY,
+    ImageRepository,
   ],
   exports: [PRODUCTS_REPOSITORY],
 })

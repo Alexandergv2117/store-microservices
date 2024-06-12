@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
@@ -34,18 +34,11 @@ export class CategoryRepositoryPostgres implements CategoryRepository {
   }: {
     categories: string[];
   }): Promise<Category[]> {
-    const categoriesFound: Category[] = [];
-
-    for (const category of categories) {
-      const categoryFound = await this.categoryRepository.findOne({
-        where: { category },
-      });
-      if (categoryFound) {
-        categoriesFound.push(categoryFound);
-      }
-    }
-
-    return Promise.resolve(categoriesFound);
+    return this.categoryRepository.find({
+      where: {
+        category: In(categories),
+      },
+    });
   }
 
   findCategoryByName({ category }: { category: string }): Promise<Category> {

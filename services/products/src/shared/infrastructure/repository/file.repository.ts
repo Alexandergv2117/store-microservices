@@ -29,20 +29,19 @@ export class ImageRepository implements IImageRepository {
     image,
     name,
   }: {
-    image: File;
+    image: Express.Multer.File;
     name: string;
   }): Promise<boolean> {
     try {
       const params = {
         Bucket: AWS_BUCKET_NAME_IMAGE,
         Key: name,
-        Body: image,
+        Body: image.buffer,
       };
-
       await this.s3Client.send(new PutObjectCommand(params));
       return true;
     } catch (error) {
-      return Promise.reject(error);
+      return false;
     }
   }
 
@@ -56,7 +55,7 @@ export class ImageRepository implements IImageRepository {
       await this.s3Client.send(new DeleteObjectCommand(params));
       return true;
     } catch (error) {
-      return Promise.reject(error);
+      return false;
     }
   }
 }

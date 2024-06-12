@@ -10,6 +10,9 @@ import { ProductRepository } from 'src/products/domain/interfaces/product-reposi
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 import { ICreateProductService } from './create.interface';
 import { CreateProductDto } from '../../dto/create.dto';
+import { ImageRepository } from 'src/shared/infrastructure/repository/file.repository';
+import { IImageRepository } from 'src/shared/domain/interfaces/file.repository';
+import { getfield } from 'src/shared/infrastructure/utils/error';
 
 @Injectable()
 export class CreateProductService implements ICreateProductService {
@@ -18,6 +21,8 @@ export class CreateProductService implements ICreateProductService {
     private readonly productRepository: ProductRepository,
     @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: CategoryRepository,
+    @Inject(ImageRepository)
+    private readonly imageRepository: IImageRepository,
   ) {}
 
   async create(product: CreateProductDto): Promise<Product> {
@@ -29,24 +34,46 @@ export class CreateProductService implements ICreateProductService {
       throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
     }
 
-    const productSaved = await this.productRepository.createProduct({
-      product: {
-        id: product.id || uuidv7(),
-        categories: existsCategory,
-        currency: product.currency,
-        description: product.description,
-        image: '',
-        name: product.name,
-        price: product.price,
-        published: product.published,
-        stock: product.stock,
-      },
+    const imageName = `products/${uuidv7()}.${product.image.mimetype.split('/')[1]}`;
+
+    const imageSaved = await this.imageRepository.uploadImage({
+      image: product.image,
+      name: imageName,
     });
 
-    if ('message' in productSaved) {
-      throw new HttpException(productSaved.message, HttpStatus.BAD_REQUEST);
+    if (!imageSaved) {
+      throw new HttpException('Error saving image', HttpStatus.BAD_REQUEST);
     }
 
-    return productSaved;
+    try {
+      const productSaved = await this.productRepository.createProduct({
+        product: {
+          id: product.id || uuidv7(),
+          categories: existsCategory,
+          currency: product.currency,
+          description: product.description,
+          image: imageName,
+          name: product.name,
+          price: product.price,
+          published: product.published,
+          stock: product.stock,
+        },
+      });
+
+      if ('message' in productSaved) {
+        throw new HttpException(productSaved.message, HttpStatus.BAD_REQUEST);
+      }
+
+      return productSaved;
+    } catch (error) {
+      await this.imageRepository.deleteImage({ name: imageName });
+
+      if (error.code === '23505') {
+        const field = getfield(error.detail);
+        throw new HttpException(`${field} already exists`, HttpStatus.CONFLICT);
+      }
+
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }

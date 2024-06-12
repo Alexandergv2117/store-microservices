@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -61,6 +61,11 @@ export class CreateProductDto {
   })
   @IsNotEmpty()
   @IsString({ each: true })
+  @Transform(({ value }) =>
+    typeof value === 'string'
+      ? value.split(',').map((item) => item.trim())
+      : value,
+  )
   categories: string[];
 
   @ApiProperty({

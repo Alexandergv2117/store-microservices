@@ -1,12 +1,14 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
-import { PRODUCTS_REPOSITORY } from 'src/shared/infrastructure/config/repository';
+import {
+  PRODUCTS_REPOSITORY,
+  UPLOAD_IMAGE_REPOSITORY,
+} from 'src/shared/infrastructure/config/repository';
 import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
 import {
   IDeleteOneProductService,
   IDeleteProductService,
 } from './delete.interface';
-import { ImageRepository } from 'src/shared/infrastructure/repository/file.repository';
 import { IImageRepository } from 'src/shared/domain/interfaces/file.repository';
 
 @Injectable()
@@ -14,7 +16,7 @@ export class DeleteProductService implements IDeleteProductService {
   constructor(
     @Inject(PRODUCTS_REPOSITORY)
     private readonly productRepository: ProductRepository,
-    @Inject(ImageRepository)
+    @Inject(UPLOAD_IMAGE_REPOSITORY)
     private readonly imageRepository: IImageRepository,
   ) {}
   async deleteOne({ id }: IDeleteOneProductService): Promise<void> {

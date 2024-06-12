@@ -5,12 +5,12 @@ import { Product } from 'src/shared/domain/entities/product.entity';
 import {
   CATEGORY_REPOSITORY,
   PRODUCTS_REPOSITORY,
+  UPLOAD_IMAGE_REPOSITORY,
 } from 'src/shared/infrastructure/config/repository';
 import { ProductRepository } from 'src/products/domain/interfaces/product-repository.interface';
 import { CategoryRepository } from 'src/categories/domain/interfaces/category-repository.interface';
 import { ICreateProductService } from './create.interface';
 import { CreateProductDto } from '../../dto/create.dto';
-import { ImageRepository } from 'src/shared/infrastructure/repository/file.repository';
 import { IImageRepository } from 'src/shared/domain/interfaces/file.repository';
 import { getfield } from 'src/shared/infrastructure/utils/error';
 
@@ -21,7 +21,7 @@ export class CreateProductService implements ICreateProductService {
     private readonly productRepository: ProductRepository,
     @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: CategoryRepository,
-    @Inject(ImageRepository)
+    @Inject(UPLOAD_IMAGE_REPOSITORY)
     private readonly imageRepository: IImageRepository,
   ) {}
 

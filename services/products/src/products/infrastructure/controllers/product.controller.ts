@@ -7,6 +7,7 @@ import {
   Inject,
   Param,
   Post,
+  Put,
   Query,
   UploadedFile,
   UseInterceptors,
@@ -25,6 +26,9 @@ import { GetProductService } from 'src/products/application/services/get/get.ser
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileTypePipe } from 'src/shared/application/dto/pipes/files.validator.pipe';
 import { validImg } from 'src/shared/infrastructure/utils/validFiles';
+import { UpdateProductDto } from 'src/products/application/dto/update-product.dto';
+import { UpdateProductService } from 'src/products/application/services/update-product/update-product.service';
+import { IUpdateProductService } from 'src/products/application/services/update-product/update-product.interface';
 
 @Controller('')
 @ApiTags('Product')
@@ -36,6 +40,8 @@ export class ProductController {
     private readonly getService: IGetProductService,
     @Inject(DeleteProductService)
     private readonly deleteService: IDeleteProductService,
+    @Inject(UpdateProductService)
+    private readonly updateProductService: IUpdateProductService,
   ) {}
 
   @Post()
@@ -64,6 +70,21 @@ export class ProductController {
   @Get(':id')
   async findById(@Param() { id }: GetIdDTO) {
     return await this.getService.getOneById({ id });
+  }
+
+  @Put(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  async update(
+    @Param() { id }: GetIdDTO,
+    @Body() product: UpdateProductDto,
+    @UploadedFile(new FileTypePipe(validImg.extensions, validImg.mimeTypes))
+    image: Express.Multer.File,
+  ) {
+    return await this.updateProductService.updateProduct({
+      productId: id,
+      updateProduct: { ...product, image },
+    });
   }
 
   @Delete(':id')

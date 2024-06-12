@@ -101,4 +101,26 @@ export class ProductRepositoryPostgres implements ProductRepository {
     const result = await this.productRepository.delete(id);
     return result.affected > 0;
   }
+
+  async deleteCategories({
+    categories,
+    product,
+  }: {
+    product: Product;
+    categories: string[];
+  }): Promise<boolean> {
+    try {
+      product.categories = product.categories.filter(
+        (category) => !categories.includes(category.id),
+      );
+
+      for (const category of product.categories) {
+        await this.productCategoryRepository.delete(category.id);
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

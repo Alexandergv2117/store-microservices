@@ -13,7 +13,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 
-import { GetIdDTO } from 'src/shared/application/dto/getId.dto';
+import {
+  GetIdCategoryDTO,
+  GetIdDTO,
+} from 'src/shared/application/dto/getId.dto';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
 import { CreateProductDto } from 'src/products/application/dto/create.dto';
@@ -29,6 +32,8 @@ import { validImg } from 'src/shared/infrastructure/utils/validFiles';
 import { UpdateProductDto } from 'src/products/application/dto/update-product.dto';
 import { UpdateProductService } from 'src/products/application/services/update-product/update-product.service';
 import { IUpdateProductService } from 'src/products/application/services/update-product/update-product.interface';
+import { DeleteCategoriesService } from 'src/products/application/services/delete-categories/delete-categories.service';
+import { IDeleteCategoriesServices } from 'src/products/application/services/delete-categories/delete-categories.interface';
 
 @Controller('')
 @ApiTags('Product')
@@ -40,6 +45,8 @@ export class ProductController {
     private readonly getService: IGetProductService,
     @Inject(DeleteProductService)
     private readonly deleteService: IDeleteProductService,
+    @Inject(DeleteCategoriesService)
+    private readonly deleteCategoriesService: IDeleteCategoriesServices,
     @Inject(UpdateProductService)
     private readonly updateProductService: IUpdateProductService,
   ) {}
@@ -90,5 +97,16 @@ export class ProductController {
   @Delete(':id')
   async delete(@Param() { id }: GetIdDTO) {
     return await this.deleteService.deleteOne({ id });
+  }
+
+  @Delete(':id/category')
+  async deleteCategory(
+    @Param() { id }: GetIdDTO,
+    @Body() { categories }: GetIdCategoryDTO,
+  ) {
+    return await this.deleteCategoriesService.deleteCategories({
+      id,
+      categories,
+    });
   }
 }

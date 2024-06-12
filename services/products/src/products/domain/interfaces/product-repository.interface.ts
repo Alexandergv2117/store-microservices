@@ -12,4 +12,8 @@ export interface ProductRepository {
   findProductById(data: { id: string }): Promise<Product>;
   updateProduct(data: { id: string; product: Product }): Promise<Product>;
   deleteProduct(data: { id: string }): Promise<boolean>;
+  deleteCategories(data: {
+    product: Product;
+    categories: string[];
+  }): Promise<boolean>;
 }

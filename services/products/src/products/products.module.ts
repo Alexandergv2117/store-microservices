@@ -10,6 +10,7 @@ import { GetProductService } from './application/services/get/get.service';
 import { CreateProductService } from './application/services/create/create.service';
 import { ProductController } from './infrastructure/controllers/product.controller';
 import { UpdateProductService } from './application/services/update-product/update-product.service';
+import { DeleteCategoriesService } from './application/services/delete-categories/delete-categories.service';
 
 @Global()
 @Module({
@@ -22,6 +23,7 @@ import { UpdateProductService } from './application/services/update-product/upda
     PRODUCTS_REPOSITORY,
     UPLOAD_IMAGE_REPOSITORY,
     UpdateProductService,
+    DeleteCategoriesService,
   ],
   exports: [PRODUCTS_REPOSITORY],
 })

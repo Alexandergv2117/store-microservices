@@ -7,3 +7,14 @@ export class GetIdDTO {
   @IsNotEmpty()
   id: string;
 }
+
+export class GetIdCategoryDTO {
+  @ApiProperty({
+    type: String,
+    description: 'Id',
+    required: true,
+    isArray: true,
+  })
+  @IsUUID('all', { each: true })
+  categories: string[];
+}

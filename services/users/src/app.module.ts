@@ -7,9 +7,13 @@ import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
 
 import { postgresqlConfig } from './shared/infrastructure/config/postgreSQL.config';
+import { DB_TYPE } from './shared/infrastructure/env';
+
+const ORM =
+  DB_TYPE === 'relacional' ? TypeOrmModule.forRoot(postgresqlConfig) : null;
 
 @Module({
-  imports: [TypeOrmModule.forRoot(postgresqlConfig), UserModule, RoleModule],
+  imports: [ORM, UserModule, RoleModule],
   controllers: [AppController],
   providers: [AppService],
 })

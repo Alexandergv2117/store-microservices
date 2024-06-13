@@ -10,6 +10,11 @@ export interface ProductRepository {
     data: PaginationDTO & SearchDTO,
   ): Promise<[Product[], number]>;
   findProductById(data: { id: string }): Promise<Product>;
-  // updateProduct(data: { product: Product }): Promise<Product>;
+  updateProduct(data: { id: string; product: Product }): Promise<Product>;
   deleteProduct(data: { id: string }): Promise<boolean>;
+  deleteCategories(data: {
+    product: Product;
+    categories: string[];
+  }): Promise<boolean>;
+  addCategories(data: { product: Product }): Promise<boolean>;
 }

@@ -14,19 +14,19 @@ export class CategoryRepositoryPostgres implements CategoryRepository {
     @InjectRepository(CategoriesEntity)
     private readonly categoryRepository: Repository<CategoriesEntity>,
   ) {}
-  findCategotiesByIds({ ids }: { ids: string[] }): Promise<Category[]> {
+  async findCategotiesByIds({ ids }: { ids: string[] }): Promise<Category[]> {
     const categories: Category[] = [];
 
-    ids.forEach(async (id) => {
+    for (const id of ids) {
       const category = await this.categoryRepository.findOne({
         where: { id },
       });
       if (category) {
         categories.push(category);
       }
-    });
+    }
 
-    return Promise.resolve(categories);
+    return categories;
   }
 
   async findCategoriesByNames({

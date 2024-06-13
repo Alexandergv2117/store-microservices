@@ -15,7 +15,6 @@ export class ProductRepositoryPostgres implements ProductRepository {
     @InjectRepository(ProductsCategoriesEntity)
     private readonly productCategoryRepository: Repository<ProductsCategoriesEntity>,
   ) {}
-
   async createProduct({
     product,
   }: {
@@ -73,8 +72,71 @@ export class ProductRepositoryPostgres implements ProductRepository {
     return product as unknown as Product;
   }
 
+  async updateProduct({
+    id,
+    product,
+  }: {
+    id: string;
+    product: Product;
+  }): Promise<Product> {
+    try {
+      const updateProduct = await this.productRepository.save({
+        id,
+        name: product.name,
+        description: product.description,
+        image: product.image,
+        price: product.price,
+        currency: product.currency,
+        stock: product.stock,
+        published: product.published,
+      });
+
+      return updateProduct as unknown as Product;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async addCategories({ product }: { product: Product }): Promise<boolean> {
+    try {
+      console.log(product.categories);
+      for (const category of product.categories) {
+        await this.productCategoryRepository.save({
+          product: product as unknown as ProductsEntity,
+          category,
+        });
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   async deleteProduct({ id }: { id: string }): Promise<boolean> {
     const result = await this.productRepository.delete(id);
     return result.affected > 0;
+  }
+
+  async deleteCategories({
+    categories,
+    product,
+  }: {
+    product: Product;
+    categories: string[];
+  }): Promise<boolean> {
+    try {
+      product.categories = product.categories.filter(
+        (category) => !categories.includes(category.id),
+      );
+
+      for (const category of product.categories) {
+        await this.productCategoryRepository.delete(category.id);
+      }
+
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

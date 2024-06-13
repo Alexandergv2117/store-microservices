@@ -7,12 +7,16 @@ import {
   Inject,
   Param,
   Post,
+  Put,
   Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 
-import { GetIdDTO } from 'src/shared/application/dto/getId.dto';
+import {
+  GetIdCategoryDTO,
+  GetIdDTO,
+} from 'src/shared/application/dto/getId.dto';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
 import { CreateProductDto } from 'src/products/application/dto/create.dto';
@@ -25,6 +29,13 @@ import { GetProductService } from 'src/products/application/services/get/get.ser
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileTypePipe } from 'src/shared/application/dto/pipes/files.validator.pipe';
 import { validImg } from 'src/shared/infrastructure/utils/validFiles';
+import { UpdateProductDto } from 'src/products/application/dto/update-product.dto';
+import { UpdateProductService } from 'src/products/application/services/update-product/update-product.service';
+import { IUpdateProductService } from 'src/products/application/services/update-product/update-product.interface';
+import { DeleteCategoriesService } from 'src/products/application/services/delete-categories/delete-categories.service';
+import { IDeleteCategoriesServices } from 'src/products/application/services/delete-categories/delete-categories.interface';
+import { AddCategoriesService } from 'src/products/application/services/add-categories/add-categories.service';
+import { IAddCategoriesService } from 'src/products/application/services/add-categories/add-categories.interface';
 
 @Controller('')
 @ApiTags('Product')
@@ -36,6 +47,12 @@ export class ProductController {
     private readonly getService: IGetProductService,
     @Inject(DeleteProductService)
     private readonly deleteService: IDeleteProductService,
+    @Inject(DeleteCategoriesService)
+    private readonly deleteCategoriesService: IDeleteCategoriesServices,
+    @Inject(AddCategoriesService)
+    private readonly addCategoriesService: IAddCategoriesService,
+    @Inject(UpdateProductService)
+    private readonly updateProductService: IUpdateProductService,
   ) {}
 
   @Post()
@@ -66,8 +83,45 @@ export class ProductController {
     return await this.getService.getOneById({ id });
   }
 
+  @Put(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  async update(
+    @Param() { id }: GetIdDTO,
+    @Body() product: UpdateProductDto,
+    @UploadedFile(new FileTypePipe(validImg.extensions, validImg.mimeTypes))
+    image: Express.Multer.File,
+  ) {
+    return await this.updateProductService.updateProduct({
+      productId: id,
+      updateProduct: { ...product, image },
+    });
+  }
+
+  @Put(':id/category')
+  async addCategory(
+    @Param() { id }: GetIdDTO,
+    @Body() { categories }: GetIdCategoryDTO,
+  ) {
+    return await this.addCategoriesService.addCategoriesToProduct({
+      id,
+      categories,
+    });
+  }
+
   @Delete(':id')
   async delete(@Param() { id }: GetIdDTO) {
     return await this.deleteService.deleteOne({ id });
+  }
+
+  @Delete(':id/category')
+  async deleteCategory(
+    @Param() { id }: GetIdDTO,
+    @Body() { categories }: GetIdCategoryDTO,
+  ) {
+    return await this.deleteCategoriesService.deleteCategories({
+      id,
+      categories,
+    });
   }
 }

@@ -1,18 +1,20 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IUserRepository } from 'src/user/domain/user.repository';
-import { UserRepositortPostgres } from 'src/user/infrastructure/persistence/user.postgres';
 import { IUpdateOneRoleService, IUpdateUserService } from './update.interface';
-import { RolesRepositoryPostgres } from 'src/role/infrastructure/persistence/role.postgres';
 import { IRolesRepository } from 'src/role/domain/roles.repostory';
 import { UserEntity } from 'src/user/domain/entities/user.entity';
 import { getfield } from 'src/shared/infrastructure/utils/error';
+import {
+  ROLES_REPOSITORY,
+  USER_REPOSITORY,
+} from 'src/shared/infrastructure/config/repository';
 
 @Injectable()
 export class UpdateUserService implements IUpdateUserService {
   constructor(
-    @Inject(UserRepositortPostgres)
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
-    @Inject(RolesRepositoryPostgres)
+    @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
   ) {}
   async updateOne({ id, user }: IUpdateOneRoleService): Promise<void> {

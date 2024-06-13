@@ -1,15 +1,15 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { IUpdateOneRoleService, IUpdateRoleService } from './update.interface';
-import { RolesRepositoryPostgres } from '../../../infrastructure/persistence/role.postgres';
 import { IRolesRepository } from '../../../domain/roles.repostory';
 import { RolesEntity } from '../../../domain/entities/roles.entity';
 import { getfield } from 'src/shared/infrastructure/utils/error';
+import { ROLES_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 
 @Injectable()
 export class UpdateRoleService implements IUpdateRoleService {
   constructor(
-    @Inject(RolesRepositoryPostgres)
+    @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
   ) {}
 

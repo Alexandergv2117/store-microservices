@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IDeleteOneRoleService, IDeleteRoleService } from './delete.interface';
-import { RolesRepositoryPostgres } from 'src/role/infrastructure/persistence/role.postgres';
 import { IRolesRepository } from 'src/role/domain/roles.repostory';
+import { ROLES_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 
 @Injectable()
 export class DeleteService implements IDeleteRoleService {
   constructor(
-    @Inject(RolesRepositoryPostgres)
+    @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
   ) {}
 

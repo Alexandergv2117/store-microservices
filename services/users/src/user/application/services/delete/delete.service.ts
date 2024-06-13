@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IUserRepository } from 'src/user/domain/user.repository';
-import { UserRepositortPostgres } from 'src/user/infrastructure/persistence/user.postgres';
 import { IDeleteOneUserService, IDeleteUserService } from './delete.interface';
+import { USER_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 
 @Injectable()
 export class DeleteUserService implements IDeleteUserService {
   constructor(
-    @Inject(UserRepositortPostgres)
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
   ) {}
 

@@ -2,11 +2,11 @@ import { Global, Module } from '@nestjs/common';
 
 import { CreateService } from './application/services/create/create.service';
 import { RoleController } from './infrastructure/controllers/role.controller';
-import { RolesRepositoryPostgres } from './infrastructure/persistence/role.postgres';
 import { GetRoleService } from './application/services/get/get.service';
 import { UpdateRoleService } from './application/services/update/update.service';
 import { DeleteService } from './application/services/delete/delete.service';
 import { ORM } from 'src/shared/infrastructure/config/orm';
+import { ROLES_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 
 @Global()
 @Module({
@@ -14,11 +14,11 @@ import { ORM } from 'src/shared/infrastructure/config/orm';
   controllers: [RoleController],
   providers: [
     CreateService,
-    RolesRepositoryPostgres,
     GetRoleService,
     UpdateRoleService,
     DeleteService,
+    ROLES_REPOSITORY,
   ],
-  exports: [RolesRepositoryPostgres],
+  exports: [ROLES_REPOSITORY],
 })
 export class RoleModule {}

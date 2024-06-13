@@ -3,22 +3,24 @@ import { uuidv7 } from 'uuidv7';
 import { ICreateUserService } from './create.interface';
 import { UserEntity } from 'src/user/domain/entities/user.entity';
 import { CreateUserDto } from '../../dto/create.dto';
-import { UserRepositortPostgres } from 'src/user/infrastructure/persistence/user.postgres';
 import { IUserRepository } from 'src/user/domain/user.repository';
 import { IRolesRepository } from 'src/role/domain/roles.repostory';
-import { RolesRepositoryPostgres } from 'src/role/infrastructure/persistence/role.postgres';
 import { IPasswordRepository } from 'src/user/domain/password.repository';
-import { PasswordRepository } from 'src/user/infrastructure/utils/password.repository';
 import { getfield } from 'src/shared/infrastructure/utils/error';
+import {
+  PASSWORD_REPOSITORY,
+  ROLES_REPOSITORY,
+  USER_REPOSITORY,
+} from 'src/shared/infrastructure/config/repository';
 
 @Injectable()
 export class CreateUserService implements ICreateUserService {
   constructor(
-    @Inject(UserRepositortPostgres)
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
-    @Inject(RolesRepositoryPostgres)
+    @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
-    @Inject(PasswordRepository)
+    @Inject(PASSWORD_REPOSITORY)
     private readonly passwordRepository: IPasswordRepository,
   ) {}
   async create(user: CreateUserDto): Promise<UserEntity> {

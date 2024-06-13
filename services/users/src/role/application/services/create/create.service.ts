@@ -6,13 +6,13 @@ import { CreateRoleDTO } from '../../dto/create.dto';
 
 import { RolesEntity } from '../../../domain/entities/roles.entity';
 import { IRolesRepository } from '../../../domain/roles.repostory';
-import { RolesRepositoryPostgres } from '../../../infrastructure/persistence/role.postgres';
 import { getfield } from 'src/shared/infrastructure/utils/error';
+import { ROLES_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 
 @Injectable()
 export class CreateService implements ICreateRoleService {
   constructor(
-    @Inject(RolesRepositoryPostgres)
+    @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
   ) {}
   async create(rol: CreateRoleDTO): Promise<RolesEntity> {

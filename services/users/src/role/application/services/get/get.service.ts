@@ -2,15 +2,15 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { IGetRoleByIdService, IGetRoleService } from './get.interface';
 import { RolesEntity } from '../../../domain/entities/roles.entity';
-import { RolesRepositoryPostgres } from '../../../infrastructure/persistence/role.postgres';
 import { IRolesRepository } from '../../../domain/roles.repostory';
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
+import { ROLES_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 
 @Injectable()
 export class GetRoleService implements IGetRoleService {
   constructor(
-    @Inject(RolesRepositoryPostgres)
+    @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
   ) {}
   async getOneById({ id }: IGetRoleByIdService): Promise<RolesEntity> {

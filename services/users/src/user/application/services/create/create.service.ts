@@ -10,8 +10,10 @@ import { getfield } from 'src/shared/infrastructure/utils/error';
 import {
   PASSWORD_REPOSITORY,
   ROLES_REPOSITORY,
+  UPLOAD_IMAGE_REPOSITORY,
   USER_REPOSITORY,
 } from 'src/shared/infrastructure/config/repository';
+import { IImageRepository } from 'src/shared/domain/interfaces/file.repository';
 
 @Injectable()
 export class CreateUserService implements ICreateUserService {
@@ -22,6 +24,8 @@ export class CreateUserService implements ICreateUserService {
     private readonly rolesRepository: IRolesRepository,
     @Inject(PASSWORD_REPOSITORY)
     private readonly passwordRepository: IPasswordRepository,
+    @Inject(UPLOAD_IMAGE_REPOSITORY)
+    private readonly imageRepository: IImageRepository,
   ) {}
   async create(user: CreateUserDto): Promise<UserEntity> {
     const newUser = new UserEntity();
@@ -31,7 +35,6 @@ export class CreateUserService implements ICreateUserService {
     newUser.password = this.passwordRepository.hashPassword(user.password);
     newUser.name = user.name;
     newUser.lastname = user.lastname;
-    newUser.image = user.image;
     newUser.email = user.email;
     newUser.phone = user.phone;
     const existRole = await this.rolesRepository.findByName(user.role);
@@ -42,10 +45,26 @@ export class CreateUserService implements ICreateUserService {
 
     newUser.role = existRole;
 
+    // Upload image
+    const imageName = `users/${uuidv7()}.${user.image.mimetype.split('/')[1]}`;
+
+    const imageSaved = await this.imageRepository.uploadImage({
+      image: user.image,
+      name: imageName,
+    });
+
+    if (!imageSaved) {
+      throw new HttpException('Error saving image', HttpStatus.BAD_REQUEST);
+    }
+
+    newUser.image = imageName;
+
     try {
       await this.userRepository.create(newUser);
       return await this.userRepository.findById(newUser.id);
     } catch (error) {
+      await this.imageRepository.deleteImage({ name: imageName });
+
       if (error.code === '23505') {
         const field = getfield(error.detail);
         throw new HttpException(`${field} already exists`, HttpStatus.CONFLICT);

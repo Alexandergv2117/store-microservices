@@ -1,4 +1,4 @@
-import { ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import {
   Body,
   Controller,
@@ -9,6 +9,8 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
@@ -24,8 +26,11 @@ import { UpdateUserService } from 'src/user/application/services/update/update.s
 import { CreateUserDto } from 'src/user/application/dto/create.dto';
 import { GetIdUserDTO } from 'src/user/application/dto/get.dto';
 import { UpdateUserDTO } from 'src/user/application/dto/update.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileTypePipe } from 'src/shared/application/pipes/files.validator.pipe';
+import { validImg } from 'src/shared/infrastructure/utils/validFiles';
 
-@Controller('user')
+@Controller('')
 @ApiTags('User')
 export class UserController {
   constructor(
@@ -39,9 +44,27 @@ export class UserController {
     private readonly deleteService: IDeleteUserService,
   ) {}
 
+  @Post('')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @Body() newUser: CreateUserDto,
+    @UploadedFile(new FileTypePipe(validImg.extensions, validImg.mimeTypes))
+    image: Express.Multer.File,
+  ) {
+    return await this.createService.create({
+      ...newUser,
+      role: 'admin',
+      image,
+    });
+  }
+
   @Post('public')
-  async create(@Body() newUser: CreateUserDto) {
-    return await this.createService.create(newUser);
+  async createUserPublic(@Body() newUser: CreateUserDto) {
+    return await this.createService.create({
+      ...newUser,
+      role: 'admin',
+    });
   }
 
   @Get()

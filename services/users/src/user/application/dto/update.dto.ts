@@ -18,10 +18,14 @@ export class UpdateUserDTO {
   @IsString()
   lastname?: string;
 
-  @ApiProperty({ required: false, type: 'string' })
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'User image',
+    required: false,
+  })
   @IsOptional()
-  @IsString()
-  image?: string;
+  image: Express.Multer.File;
 
   @ApiProperty({ required: false, type: 'string' })
   @IsOptional()

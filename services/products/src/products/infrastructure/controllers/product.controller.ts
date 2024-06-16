@@ -27,7 +27,7 @@ import { DeleteProductService } from 'src/products/application/services/delete/d
 import { IGetProductService } from 'src/products/application/services/get/get.interface';
 import { GetProductService } from 'src/products/application/services/get/get.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FileTypePipe } from 'src/shared/application/dto/pipes/files.validator.pipe';
+import { FileTypePipe } from 'src/shared/application/pipes/files.validator.pipe';
 import { validImg } from 'src/shared/infrastructure/utils/validFiles';
 import { UpdateProductDto } from 'src/products/application/dto/update-product.dto';
 import { UpdateProductService } from 'src/products/application/services/update-product/update-product.service';

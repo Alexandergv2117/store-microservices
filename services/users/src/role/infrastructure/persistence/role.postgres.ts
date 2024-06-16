@@ -1,15 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  InsertResult,
-  DeleteResult,
-  Repository,
-  Like,
-  UpdateResult,
-} from 'typeorm';
+import { Repository, Like } from 'typeorm';
 
 import { RolesEntity } from '../../domain/entities/roles.entity';
 import { IRolesRepository } from '../../domain/roles.repostory';
+import { Role } from 'src/shared/domain/entities/roles';
 
 @Injectable()
 export class RolesRepositoryPostgres implements IRolesRepository {
@@ -17,15 +12,29 @@ export class RolesRepositoryPostgres implements IRolesRepository {
     @InjectRepository(RolesEntity)
     private readonly roleRepository: Repository<RolesEntity>,
   ) {}
-  updateOne(id: string, role: RolesEntity): Promise<UpdateResult> {
-    return this.roleRepository.update(id, role);
+  async updateOne({ id, role }: { id: string; role: Role }): Promise<Role> {
+    try {
+      const existRole = await this.roleRepository.findOne({ where: { id } });
+
+      if (!existRole) {
+        return null;
+      }
+
+      this.roleRepository.merge(existRole, role);
+
+      const updateRole = await this.roleRepository.save(existRole);
+
+      return updateRole;
+    } catch (error) {
+      return null;
+    }
   }
 
   findAll(options?: {
     page?: number;
     limit?: number;
     search?: string;
-  }): Promise<[RolesEntity[], number]> {
+  }): Promise<[Role[], number]> {
     const { page = 1, limit = 10, search } = options;
 
     return this.roleRepository.findAndCount({
@@ -39,21 +48,26 @@ export class RolesRepositoryPostgres implements IRolesRepository {
     });
   }
 
-  findById(id: string): Promise<RolesEntity> {
+  findById({ id }: { id: string }): Promise<Role> {
     return this.roleRepository.findOne({
       where: { id },
     });
   }
 
-  findByName(role: string): Promise<RolesEntity> {
+  findByName({ role }: { role: string }): Promise<Role> {
     return this.roleRepository.findOne({ where: { role } });
   }
 
-  create(role: RolesEntity): Promise<InsertResult> {
-    return this.roleRepository.insert(role);
+  create({ role }: { role: Role }): Promise<Role> {
+    return this.roleRepository.save(role);
   }
 
-  delete(id: string): Promise<DeleteResult> {
-    return this.roleRepository.delete(id);
+  async delete({ id }: { id: string }): Promise<boolean> {
+    try {
+      const isDelete = await this.roleRepository.delete(id);
+      return isDelete.affected > 1;
+    } catch (error) {
+      return false;
+    }
   }
 }

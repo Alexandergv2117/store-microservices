@@ -1,47 +1,77 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IUserRepository } from 'src/user/domain/user.repository';
-import { UserRepositortPostgres } from 'src/user/infrastructure/persistence/user.postgres';
 import { IUpdateOneRoleService, IUpdateUserService } from './update.interface';
-import { RolesRepositoryPostgres } from 'src/role/infrastructure/persistence/role.postgres';
 import { IRolesRepository } from 'src/role/domain/roles.repostory';
-import { UserEntity } from 'src/user/domain/entities/user.entity';
 import { getfield } from 'src/shared/infrastructure/utils/error';
+import {
+  ROLES_REPOSITORY,
+  UPLOAD_IMAGE_REPOSITORY,
+  USER_REPOSITORY,
+} from 'src/shared/infrastructure/config/repository';
+import { IImageRepository } from 'src/shared/domain/interfaces/file.repository';
+import { uuidv7 } from 'uuidv7';
+import { User } from 'src/shared/domain/entities/user';
 
 @Injectable()
 export class UpdateUserService implements IUpdateUserService {
   constructor(
-    @Inject(UserRepositortPostgres)
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
-    @Inject(RolesRepositoryPostgres)
+    @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
+    @Inject(UPLOAD_IMAGE_REPOSITORY)
+    private readonly imageRepository: IImageRepository,
   ) {}
-  async updateOne({ id, user }: IUpdateOneRoleService): Promise<void> {
-    const existUser = await this.userRepository.findById(id);
+  async updateOne({ id, user }: IUpdateOneRoleService): Promise<User> {
+    const existUser = await this.userRepository.findById({ id });
 
     if (!existUser) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    const updateUser = new UserEntity();
+    if (user.image) {
+      const imageName = `users/${uuidv7()}.${user.image.mimetype.split('/')[1]}`;
 
-    updateUser.username = user.username || existUser.username;
-    updateUser.name = user.name || existUser.name;
-    updateUser.lastname = user.lastname || existUser.lastname;
-    updateUser.image = user.image || existUser.image;
-    updateUser.email = user.email || existUser.email;
-    updateUser.phone = user.phone || existUser.phone;
-    updateUser.role = user.role
-      ? await this.rolesRepository.findByName(user.role)
+      const deleteImage = await this.imageRepository.deleteImage({
+        name: existUser.image,
+      });
+
+      if (!deleteImage) {
+        throw new HttpException('Error deleting image', HttpStatus.BAD_REQUEST);
+      }
+
+      const imageSaved = await this.imageRepository.uploadImage({
+        image: user.image,
+        name: imageName,
+      });
+
+      if (!imageSaved) {
+        throw new HttpException('Error saving image', HttpStatus.BAD_REQUEST);
+      }
+
+      existUser.image = imageName;
+    }
+
+    existUser.username = user.username || existUser.username;
+    existUser.name = user.name || existUser.name;
+    existUser.lastname = user.lastname || existUser.lastname;
+    existUser.email = user.email || existUser.email;
+    existUser.phone = user.phone || existUser.phone;
+    existUser.role = user.role
+      ? await this.rolesRepository.findByName({ role: user.role })
       : existUser.role;
 
     try {
-      const result = await this.userRepository.updateOne(id, updateUser);
+      const result = await this.userRepository.updateOne({
+        id,
+        user: existUser,
+      });
 
-      if (result.affected === 0) {
+      if (!result) {
         throw new HttpException('User not updated', HttpStatus.BAD_REQUEST);
       }
 
-      throw new HttpException('User updated', HttpStatus.OK);
+      return result;
     } catch (error) {
       if (error.code === '23505') {
         const field = getfield(error.detail);

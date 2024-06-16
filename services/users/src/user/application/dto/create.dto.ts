@@ -36,10 +36,13 @@ export class CreateUserDto {
   @IsString()
   lastname: string;
 
-  @ApiProperty({ required: true, type: 'string' })
-  @IsNotEmpty()
-  @IsString()
-  image: string;
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'User image',
+    required: true,
+  })
+  image: Express.Multer.File;
 
   @ApiProperty({ required: true, type: 'string' })
   @IsNotEmpty()

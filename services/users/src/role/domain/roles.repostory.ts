@@ -1,16 +1,14 @@
-import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
-
-import { RolesEntity } from './entities/roles.entity';
+import { Role } from 'src/shared/domain/entities/roles';
 
 export interface IRolesRepository {
   findAll(options?: {
     page?: number;
     limit?: number;
     search?: string;
-  }): Promise<[RolesEntity[], number]>;
-  findById(id: string): Promise<RolesEntity>;
-  findByName(role: string): Promise<RolesEntity>;
-  create(role: RolesEntity): Promise<InsertResult>;
-  delete(id: string): Promise<DeleteResult>;
-  updateOne(id: string, role: RolesEntity): Promise<UpdateResult>;
+  }): Promise<[Role[], number]>;
+  findById(data: { id: string }): Promise<Role>;
+  findByName(data: { role: string }): Promise<Role>;
+  create(data: { role: Role }): Promise<Role>;
+  delete(data: { id: string }): Promise<boolean>;
+  updateOne(data: { id: string; role: Role }): Promise<Role>;
 }

@@ -1,6 +1,6 @@
 import { PaginationDTO } from 'src/shared/application/dto/pagination.dto';
 import { SearchDTO } from 'src/shared/application/dto/search.dto';
-import { UserEntity } from 'src/user/domain/entities/user.entity';
+import { User } from 'src/shared/domain/entities/user';
 
 export interface IGetUserByIdService {
   id: string;
@@ -9,6 +9,6 @@ export interface IGetUserByIdService {
 export interface IGetUserService {
   getAll(
     query: PaginationDTO & SearchDTO,
-  ): Promise<{ data: UserEntity[]; total: number }>;
-  getOneById(data: IGetUserByIdService): Promise<UserEntity>;
+  ): Promise<{ data: User[]; total: number }>;
+  getOneById(data: IGetUserByIdService): Promise<User>;
 }

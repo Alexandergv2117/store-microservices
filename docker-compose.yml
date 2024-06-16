@@ -73,6 +73,11 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME_USER}
       DB_LOGGING: false
+      AWS_BUCKET_NAME_IMAGE: ${AWS_BUCKET_NAME_IMAGE}
+      AWS_BUCKET_NAME_REGION: ${AWS_BUCKET_NAME_REGION}
+      AWS_PUBLIC_KEY: ${AWS_PUBLIC_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+
 
   products:
     container_name: store-products

@@ -8,6 +8,7 @@ import {
 import { IUpdateProductService } from './update-product.interface';
 import { UpdateProductDto } from '../../dto/update-product.dto';
 import { uuidv7 } from 'uuidv7';
+import { Product } from 'src/shared/domain/entities/product.entity';
 
 @Injectable()
 export class UpdateProductService implements IUpdateProductService {
@@ -23,7 +24,7 @@ export class UpdateProductService implements IUpdateProductService {
   }: {
     productId: string;
     updateProduct: UpdateProductDto;
-  }): Promise<void> {
+  }): Promise<Product> {
     const product = await this.productRepository.findProductById({
       id: productId,
     });
@@ -71,6 +72,6 @@ export class UpdateProductService implements IUpdateProductService {
       throw new HttpException('Product not updated', HttpStatus.BAD_REQUEST);
     }
 
-    throw new HttpException('Product updated', HttpStatus.OK);
+    return product;
   }
 }

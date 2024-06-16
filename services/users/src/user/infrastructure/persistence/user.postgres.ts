@@ -49,6 +49,7 @@ export class UserRepositortPostgres implements IUserRepository {
           username: Like(`%${search}%`),
         }),
       },
+      relations: ['role'],
       skip: (page - 1) * limit,
       take: limit,
       // withDeleted: true,
@@ -58,20 +59,22 @@ export class UserRepositortPostgres implements IUserRepository {
   findById({ id }: { id: string }): Promise<User> {
     return this.userRepository.findOne({
       where: { id },
+      relations: ['role'],
     });
   }
 
   async create({ user }: { user: User }): Promise<User> {
-    // const role = await this.roleRepository.findOne({
-    //   where: { role: user.role.role },
-    // });
+    const role = await this.roleRepository.findOne({
+      where: { role: user.role.role },
+    });
 
-    // if (!role) {
-    //   return null;
-    // }
+    if (!role) {
+      return null;
+    }
 
     return this.userRepository.save({
       ...user,
+      role,
     });
   }
 
@@ -86,13 +89,13 @@ export class UserRepositortPostgres implements IUserRepository {
 
   async updateOne({ id, user }: { id: string; user: User }): Promise<User> {
     try {
-      // const role = await this.roleRepository.findOne({
-      //   where: { role: user.role.role },
-      // });
+      const role = await this.roleRepository.findOne({
+        where: { role: user.role.role },
+      });
 
-      // if (!role) {
-      //   return null;
-      // }
+      if (!role) {
+        return null;
+      }
 
       const updateUser = await this.userRepository.save({ ...user, id });
       return updateUser;

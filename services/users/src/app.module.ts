@@ -13,7 +13,7 @@ const ORM =
   DB_TYPE === 'relacional' ? TypeOrmModule.forRoot(postgresqlConfig) : null;
 
 @Module({
-  imports: [ORM, UserModule, RoleModule],
+  imports: [ORM, RoleModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })

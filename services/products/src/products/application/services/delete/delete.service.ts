@@ -36,8 +36,6 @@ export class DeleteProductService implements IDeleteProductService {
       name: existsProduct.image,
     });
 
-    console.log(deleteImage);
-
     if (!deleteImage) {
       throw new HttpException('Image not deleted', HttpStatus.BAD_REQUEST);
     }

@@ -11,16 +11,16 @@ export class DeleteService implements IDeleteRoleService {
   ) {}
 
   async deleteOne({ id }: IDeleteOneRoleService): Promise<void> {
-    const existRole = await this.rolesRepository.findById(id);
+    const existRole = await this.rolesRepository.findById({ id });
 
     if (!existRole) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
 
-    const result = await this.rolesRepository.delete(id);
+    const result = await this.rolesRepository.delete({ id });
 
-    if (result.affected === 0) {
-      throw new HttpException('Role not deleted', HttpStatus.BAD_REQUEST);
+    if (!result) {
+      throw new HttpException('Error deleting role', HttpStatus.BAD_REQUEST);
     }
 
     throw new HttpException('Role deleted', HttpStatus.OK);

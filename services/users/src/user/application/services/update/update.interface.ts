@@ -1,3 +1,4 @@
+import { User } from 'src/shared/domain/entities/user';
 import { UpdateUserDTO } from '../../dto/update.dto';
 
 export interface IUpdateOneRoleService {
@@ -6,5 +7,5 @@ export interface IUpdateOneRoleService {
 }
 
 export interface IUpdateUserService {
-  updateOne(data: IUpdateOneRoleService): Promise<void>;
+  updateOne(data: IUpdateOneRoleService): Promise<User>;
 }

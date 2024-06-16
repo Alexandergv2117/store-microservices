@@ -4,10 +4,10 @@ import { uuidv7 } from 'uuidv7';
 import { ICreateRoleService } from './create.interface';
 import { CreateRoleDTO } from '../../dto/create.dto';
 
-import { RolesEntity } from '../../../domain/entities/roles.entity';
 import { IRolesRepository } from '../../../domain/roles.repostory';
 import { getfield } from 'src/shared/infrastructure/utils/error';
 import { ROLES_REPOSITORY } from 'src/shared/infrastructure/config/repository';
+import { Role } from 'src/shared/domain/entities/roles';
 
 @Injectable()
 export class CreateService implements ICreateRoleService {
@@ -15,15 +15,24 @@ export class CreateService implements ICreateRoleService {
     @Inject(ROLES_REPOSITORY)
     private readonly rolesRepository: IRolesRepository,
   ) {}
-  async create(rol: CreateRoleDTO): Promise<RolesEntity> {
-    const role = new RolesEntity();
+  async create(rol: CreateRoleDTO): Promise<Role> {
+    const existRole = await this.rolesRepository.findByName({ role: rol.role });
 
-    role.id = rol.id || uuidv7();
-    role.role = rol.role;
+    if (existRole) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          message: 'Role already exists',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const role = new Role(rol.id || uuidv7(), rol.role);
 
     try {
-      await this.rolesRepository.create(role);
-      return await this.rolesRepository.findById(role.id);
+      await this.rolesRepository.create({ role });
+      return await this.rolesRepository.findById({ id: role.id });
     } catch (error) {
       if (error.code === '23505') {
         const field = getfield(error.detail);

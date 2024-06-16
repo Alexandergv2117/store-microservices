@@ -1,7 +1,7 @@
 import { CreateRoleDTO } from '../../dto/create.dto';
 
-import { RolesEntity } from '../../../domain/entities/roles.entity';
+import { Role } from 'src/shared/domain/entities/roles';
 
 export interface ICreateRoleService {
-  create(rol: CreateRoleDTO): Promise<RolesEntity>;
+  create(rol: CreateRoleDTO): Promise<Role>;
 }

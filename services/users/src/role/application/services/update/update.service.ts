@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { IUpdateOneRoleService, IUpdateRoleService } from './update.interface';
 import { IRolesRepository } from '../../../domain/roles.repostory';
-import { RolesEntity } from '../../../domain/entities/roles.entity';
 import { getfield } from 'src/shared/infrastructure/utils/error';
 import { ROLES_REPOSITORY } from 'src/shared/infrastructure/config/repository';
 
@@ -14,25 +13,29 @@ export class UpdateRoleService implements IUpdateRoleService {
   ) {}
 
   async updateOne({ id, role }: IUpdateOneRoleService): Promise<void> {
-    const existRole = await this.rolesRepository.findById(id);
+    const existRole = await this.rolesRepository.findById({ id });
 
     if (!existRole) {
       throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
     }
 
-    const existName = await this.rolesRepository.findByName(role.role);
+    const existName = await this.rolesRepository.findByName({
+      role: role.role,
+    });
 
     if (existName) {
       throw new HttpException('Role already exist', HttpStatus.CONFLICT);
     }
 
-    const newRole = new RolesEntity();
-    newRole.role = role.role;
+    existRole.role = role.role || existRole.role;
 
     try {
-      const result = await this.rolesRepository.updateOne(id, newRole);
+      const result = await this.rolesRepository.updateOne({
+        id,
+        role: existRole,
+      });
 
-      if (result.affected === 0) {
+      if (!result) {
         throw new HttpException('Role not updated', HttpStatus.BAD_REQUEST);
       }
 

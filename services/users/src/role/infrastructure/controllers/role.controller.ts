@@ -26,7 +26,7 @@ import { IDeleteRoleService } from 'src/role/application/services/delete/delete.
 import { DeleteService } from 'src/role/application/services/delete/delete.service';
 
 @Controller('role')
-@ApiTags('role')
+@ApiTags('Role')
 export class RoleController {
   constructor(
     @Inject(CreateService)
@@ -39,12 +39,12 @@ export class RoleController {
     private readonly deleteService: IDeleteRoleService,
   ) {}
 
-  @Post()
+  @Post('')
   async createRole(@Body() role: CreateRoleDTO) {
     return this.createService.create(role);
   }
 
-  @Get()
+  @Get('')
   async getRoles(
     @Query() pagination: PaginationDTO,
     @Query() search: SearchDTO,

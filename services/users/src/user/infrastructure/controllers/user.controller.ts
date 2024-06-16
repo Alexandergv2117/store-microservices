@@ -67,7 +67,7 @@ export class UserController {
     });
   }
 
-  @Get()
+  @Get('')
   async getAll(@Query() pagination: PaginationDTO, @Query() search: SearchDTO) {
     const user = await this.getService.getAll({ ...pagination, ...search });
 

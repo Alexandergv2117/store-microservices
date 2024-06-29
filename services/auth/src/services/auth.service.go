@@ -23,6 +23,7 @@ func Login(email string, password string) (string, repository.UserRepository, in
 		Username: existUser.Username,
 		Email:    existUser.Email,
 		Role:     existUser.Role,
+		Image:    existUser.Image,
 	})
 
 	return token, existUser, 200, nil

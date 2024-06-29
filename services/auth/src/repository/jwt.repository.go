@@ -13,6 +13,7 @@ type CustomClaims struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Role     string `json:"role"`
+	Image    string `json:"image"`
 	jwt.StandardClaims
 }
 

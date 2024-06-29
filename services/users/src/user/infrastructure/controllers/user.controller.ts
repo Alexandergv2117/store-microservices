@@ -54,15 +54,21 @@ export class UserController {
   ) {
     return await this.createService.create({
       ...newUser,
-      role: 'admin',
       image,
     });
   }
 
   @Post('public')
-  async createUserPublic(@Body() newUser: CreateUserDto) {
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  async createUserPublic(
+    @Body() newUser: CreateUserDto,
+    @UploadedFile(new FileTypePipe(validImg.extensions, validImg.mimeTypes))
+    image: Express.Multer.File,
+  ) {
     return await this.createService.create({
       ...newUser,
+      image,
       role: 'admin',
     });
   }

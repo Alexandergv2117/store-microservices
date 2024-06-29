@@ -24,7 +24,15 @@ function RegisterPage() {
   } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
-    const result = await createUser(data);
+    const result = await createUser({
+      username: data.username,
+      password: data.password,
+      name: data.name,
+      lastname: data.lastname,
+      image: data.image[0],
+      email: data.email,
+      phone: data.phone,
+    });
 
     if (!result) {
       setErrorMessage({
@@ -89,8 +97,7 @@ function RegisterPage() {
           {...register('lastname', { required: true })}
         />
         <Input
-          type="text"
-          label="Image"
+          type="file"
           isInvalid={!!errors.image}
           errorMessage={errors.image && 'Image is required'}
           {...register('image', { required: true })}
@@ -108,13 +115,6 @@ function RegisterPage() {
           isInvalid={!!errors.phone}
           errorMessage={errors.phone && 'Phone is required'}
           {...register('phone', { required: true })}
-        />
-        <Input
-          type="text"
-          label="Role"
-          isInvalid={!!errors.role}
-          errorMessage={errors.role && 'Role is required'}
-          {...register('role', { required: true })}
         />
         <Input
           type="password"

@@ -65,7 +65,10 @@ export default function App() {
                 color="primary"
                 name={session?.user?.name || 'Anonymous'}
                 size="sm"
-                src={session?.user?.image || undefined}
+                src={
+                  `${process.env.NEXT_PUBLIC_IMAGES_URL}/${session?.user?.image}` ||
+                  undefined
+                }
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -73,14 +76,14 @@ export default function App() {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{session?.user?.email}</p>
               </DropdownItem>
-              <DropdownItem key="settings">My Settings</DropdownItem>
+              {/* <DropdownItem key="settings">My Settings</DropdownItem>
               <DropdownItem key="team_settings">Team Settings</DropdownItem>
               <DropdownItem key="analytics">Analytics</DropdownItem>
               <DropdownItem key="system">System</DropdownItem>
               <DropdownItem key="configurations">Configurations</DropdownItem>
               <DropdownItem key="help_and_feedback">
                 Help & Feedback
-              </DropdownItem>
+              </DropdownItem> */}
               <DropdownItem
                 key="logout"
                 color="danger"

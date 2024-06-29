@@ -34,6 +34,7 @@ func Login(c *fiber.Ctx) error {
 			"role":     user.Role,
 			"name":     user.Name,
 			"lastname": user.Lastname,
+			"image":    user.Image,
 		},
 	})
 }

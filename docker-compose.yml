@@ -50,7 +50,6 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME_USER}
       JWT_SECRET: ${JWT_SECRET}
-      PUBLIC_KEY: ${PUBLIC_KEY}
 
   users:
     container_name: store-users

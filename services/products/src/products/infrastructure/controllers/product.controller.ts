@@ -63,7 +63,11 @@ export class ProductController {
     @UploadedFile(new FileTypePipe(validImg.extensions, validImg.mimeTypes))
     image: Express.Multer.File,
   ) {
-    return await this.createService.create({ ...product, image });
+    return await this.createService.create({
+      ...product,
+      image,
+      published: product.published.toString() === 'true' ? true : false,
+    });
   }
 
   @Get()

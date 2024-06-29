@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
-  IsBoolean,
+  IsBooleanString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -49,8 +49,7 @@ export class CreateProductDto {
   stock: number;
 
   @ApiProperty({ type: Boolean, description: 'Product published' })
-  @Type(() => Boolean)
-  @IsBoolean()
+  @IsBooleanString()
   @IsNotEmpty()
   published: boolean;
 

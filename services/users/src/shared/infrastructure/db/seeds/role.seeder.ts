@@ -18,7 +18,7 @@ export class RolesSeederService implements OnModuleInit {
   }
 
   private async createAdminRole() {
-    const newRol = 'marketing';
+    const newRol = 'admin';
     const role = await this.rolesRepository.findByName({ role: newRol });
 
     if (!role) {

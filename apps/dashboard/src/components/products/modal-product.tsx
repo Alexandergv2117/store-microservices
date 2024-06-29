@@ -13,6 +13,8 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Select,
+  SelectItem,
   VisuallyHidden,
   tv,
   useCheckbox,
@@ -45,6 +47,7 @@ interface ModalProductProps {
 
 export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
   const session = useSession();
+  const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState('');
   const {
     register,
@@ -68,7 +71,7 @@ export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
     formData.append('image', data.productImage[0]);
     formData.append('categories', data.productCategory);
     formData.append('stock', data.productStock);
-    formData.append('published', data.isSelected);
+    formData.append('published', isSelected ? 'true' : 'false');
 
     const res = await fetch(`${API_URL}/product`, {
       method: 'POST',
@@ -87,10 +90,24 @@ export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
     onClose();
   });
 
+  const fetchCategories = async () => {
+    if (categories.length > 0) return;
+
+    const res = await fetch(`${API_URL}/product/category`, {
+      headers: {
+        Authorization: `Bearer ${session.data?.user.accessToken}`,
+      },
+    });
+    const { data } = await res.json();
+
+    if (data.categories) setCategories(data.categories);
+  };
+
   return (
     <Modal size="lg" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         {(onClose) => {
+          fetchCategories();
           return (
             <>
               <ModalHeader className="flex flex-col gap-1 items-center uppercase">
@@ -101,6 +118,11 @@ export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
                   {message && (
                     <div className="bg-danger text-white p-2 rounded-md">
                       {message}
+                    </div>
+                  )}
+                  {categories.length === 0 && (
+                    <div className="bg-warning text-white p-2 rounded-md">
+                      No categories found
                     </div>
                   )}
                 </div>
@@ -147,15 +169,23 @@ export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
                     errorMessage={errors.productStock && 'Stock is required'}
                     {...register('productStock', { required: true })}
                   />
-                  <Input
-                    type="text"
+                  <Select
+                    items={categories}
                     label="Category"
+                    placeholder="Select a category"
+                    className=""
                     isInvalid={!!errors.productCategory}
                     errorMessage={
                       errors.productCategory && 'Category is required'
                     }
                     {...register('productCategory', { required: true })}
-                  />
+                  >
+                    {(category: { id: string; category: string }) => (
+                      <SelectItem key={category.category}>
+                        {category.category}
+                      </SelectItem>
+                    )}
+                  </Select>
                   <label {...getBaseProps()}>
                     <VisuallyHidden>
                       <input {...getInputProps()} />

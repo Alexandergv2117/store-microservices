@@ -1,4 +1,4 @@
-name: Publish Image Auth svc to Docker Hub
+name: Publish Image Users svc to Docker Hub
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   avoid_reduncy:
+    if: startsWith(github.event.head_commit.message, 'publish(users):')
     runs-on: ubuntu-latest
     permissions:
       actions: write

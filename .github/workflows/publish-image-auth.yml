@@ -7,6 +7,7 @@ on:
 
 jobs:
   avoid_reduncy:
+    if: startsWith(github.event.head_commit.message, 'publish(auth):')
     runs-on: ubuntu-latest
     permissions:
       actions: write

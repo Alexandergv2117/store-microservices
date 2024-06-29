@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { CheckIcon } from '../ui/icons/CheckIcon';
 import { useForm } from 'react-hook-form';
 import { useSession } from 'next-auth/react';
+import { API_URL } from '@/lib/env';
 import {
   Button,
   Chip,
@@ -16,8 +17,6 @@ import {
   tv,
   useCheckbox,
 } from '@nextui-org/react';
-
-import { API_URL } from '@/lib/env';
 
 const checkbox = tv({
   slots: {
@@ -61,30 +60,29 @@ export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
   const styles = checkbox({ isSelected, isFocusVisible });
 
   const onSubmit = handleSubmit(async (data) => {
-    const newProduct = {
-      name: data.productName,
-      description: data.productDescription,
-      image: data.productImage,
-      price: data.productPrice,
-      published: isSelected,
-      currency: 'MXN',
-      stock: parseInt(data.productStock),
-      category: [data.productCategory],
-    };
+    const formData = new FormData();
+    formData.append('name', data.productName);
+    formData.append('description', data.productDescription);
+    formData.append('price', data.productPrice);
+    formData.append('currency', 'MXN');
+    formData.append('image', data.productImage[0]);
+    formData.append('categories', data.productCategory);
+    formData.append('stock', data.productStock);
+    formData.append('published', data.isSelected);
 
-    const res = await fetch(`${API_URL}/product/product`, {
+    const res = await fetch(`${API_URL}/product`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${session.data?.user.accessToken}`,
-        'X-Custom-Token': 'true',
       },
-      body: JSON.stringify(newProduct),
+      body: formData,
     });
 
-    if (res.status !== 201) {
+    if (!res) {
       setMessage('Something went wrong');
+      return;
     }
+
     setMessage('');
     onClose();
   });
@@ -130,8 +128,7 @@ export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
                     {...register('productDescription', { required: true })}
                   />
                   <Input
-                    type="text"
-                    label="Image"
+                    type="file"
                     isInvalid={!!errors.productImage}
                     errorMessage={errors.productImage && 'Image is required'}
                     {...register('productImage', { required: true })}

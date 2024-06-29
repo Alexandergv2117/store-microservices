@@ -41,7 +41,12 @@ export class FileTypePipe
       );
     }
 
-    return file;
+    return {
+      ...file,
+      originalname: file.originalname,
+      buffer: file.buffer,
+      mimetype: mimeType,
+    };
   }
 }
 

@@ -1,6 +1,0 @@
-{
-  "watch": ["src", "./main.go"],
-  "ignore": ["node_modules"],
-  "ext": "go",
-  "exec": "go run ./main.go"
-}

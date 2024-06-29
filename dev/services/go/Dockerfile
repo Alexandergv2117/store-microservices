@@ -1,8 +1,9 @@
 FROM golang:latest as builder
 
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y nodejs npm
+    apt-get upgrade -y
+
+RUN go install github.com/air-verse/air@latest
 
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \

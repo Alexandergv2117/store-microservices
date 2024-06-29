@@ -38,7 +38,7 @@ services:
       - 5000
     ports:
       - 5000:5000
-    command: sh -c 'go mod download && go install && npm i && npm run dev'
+    command: sh -c 'go mod download && go install && air'
     volumes:
       - ./services/auth:/srv
     networks:

@@ -8,6 +8,7 @@ import { RoleModule } from './role/role.module';
 
 import { postgresqlConfig } from './shared/infrastructure/config/postgreSQL.config';
 import { DB_TYPE } from './shared/infrastructure/env';
+import { RolesSeederService } from './shared/infrastructure/db/seeds/role.seeder';
 
 const ORM =
   DB_TYPE === 'relacional' ? TypeOrmModule.forRoot(postgresqlConfig) : null;
@@ -15,6 +16,6 @@ const ORM =
 @Module({
   imports: [ORM, RoleModule, UserModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RolesSeederService],
 })
 export class AppModule {}

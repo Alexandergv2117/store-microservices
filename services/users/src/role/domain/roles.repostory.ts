@@ -1,7 +1,7 @@
 import { Role } from 'src/shared/domain/entities/roles';
 
 export interface IRolesRepository {
-  findAll(options?: {
+  findAll(options: {
     page?: number;
     limit?: number;
     search?: string;

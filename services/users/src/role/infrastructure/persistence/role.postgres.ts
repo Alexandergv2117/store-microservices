@@ -30,13 +30,15 @@ export class RolesRepositoryPostgres implements IRolesRepository {
     }
   }
 
-  findAll(options?: {
+  findAll({
+    limit = 10,
+    page = 1,
+    search = '',
+  }: {
     page?: number;
     limit?: number;
     search?: string;
   }): Promise<[Role[], number]> {
-    const { page = 1, limit = 10, search } = options;
-
     return this.roleRepository.findAndCount({
       where: {
         ...(search && {

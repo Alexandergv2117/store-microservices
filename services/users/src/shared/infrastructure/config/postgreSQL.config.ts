@@ -1,4 +1,3 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import {
@@ -9,6 +8,7 @@ import {
   DB_PORT,
   DB_USERNAME,
 } from '../env';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export const postgresqlConfig: TypeOrmModuleOptions = {
   type: 'postgres',

@@ -13,12 +13,12 @@ for db_name in "${DB_ARRAY[@]}"; do
 done
 
 # Restaurar db1
-psql -U $POSTGRES_USER -d store_users -f ./backup/backup_users.sql
-if [ $? -eq 0 ]; then
-  echo "La restauración de la base de datos store_users fue exitosa."
-else
-  echo "Error: No se pudo restaurar la base de datos store_users."
-fi
+# psql -U $POSTGRES_USER -d store_users -f ./backup/backup_users.sql
+# if [ $? -eq 0 ]; then
+#   echo "La restauración de la base de datos store_users fue exitosa."
+# else
+#   echo "Error: No se pudo restaurar la base de datos store_users."
+# fi
 
 # Restaurar db2
 # psql -U $POSTGRES_USER -d store_products -f ./backup/backup_products.sql

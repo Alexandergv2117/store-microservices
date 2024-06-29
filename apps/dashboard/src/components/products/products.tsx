@@ -48,7 +48,10 @@ export default function Products({ products }: ProductsProps) {
       case 'name':
         return (
           <User
-            avatarProps={{ radius: 'lg', src: product.image }}
+            avatarProps={{
+              radius: 'lg',
+              src: `${process.env.NEXT_PUBLIC_IMAGES_URL}/${product.image}`,
+            }}
             name={cellValue}
           />
         );

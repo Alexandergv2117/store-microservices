@@ -40,30 +40,6 @@ func ValidateToken(token string) (repository.CustomClaims, error) {
 	return repository.ValidateJWT(tokenWituotBearer)
 }
 
-func ValidateCustomToken(token string) (repository.UserRepository, int, error) {
-	parts := strings.Split(token, " ")
-
-	if len(parts) != 2 {
-		return repository.UserRepository{}, 400, errors.New("token mal formado")
-	}
-
-	tokenWituotBearer := parts[1]
-
-	user, err := repository.ValidateJWTCustom(tokenWituotBearer)
-
-	if err != nil {
-		return repository.UserRepository{}, 400, errors.New("token invalido")
-	}
-
-	data, e := repository.GetUserByEmail(user.Email)
-
-	if e != nil || user.Email == "" {
-		return repository.UserRepository{}, 404, errors.New("email not found")
-	}
-
-	return data, 200, nil
-}
-
 func RefreshToken(token string) (string, error) {
 	claims, err := ValidateToken(token)
 

@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
@@ -78,32 +77,6 @@ func ValidateJWT(tokenString string) (CustomClaims, error) {
 
 	if !ok {
 		return CustomClaims{}, err
-	}
-
-	return *claims, nil
-}
-
-func ValidateJWTCustom(tokenString string) (CustomClaims, error) {
-	PUBLIC_KEY := []byte(config.GetEnv("PUBLIC_KEY"))
-
-	verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(PUBLIC_KEY)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return verifyKey, nil
-	})
-
-	if err != nil {
-		return CustomClaims{}, err
-	}
-
-	claims, ok := token.Claims.(*CustomClaims)
-
-	if !ok {
-		return CustomClaims{}, errors.New("no se pudo obtener los datos del token")
 	}
 
 	return *claims, nil

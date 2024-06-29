@@ -52,10 +52,7 @@ export const authOptions: NextAuthOptions = {
           name: token.name,
           email: token.email,
         },
-        process.env.PRIVATE_KEY || '',
-        {
-          algorithm: 'RS256',
-        },
+        process.env.JWT_SECRET || '',
       );
 
       token.accessToken = tokenSign;

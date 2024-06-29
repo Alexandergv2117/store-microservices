@@ -1,4 +1,4 @@
-name: Publish Image Users svc to Docker Hub
+name: Publish Image Products svc to Docker Hub
 
 on:
   push:

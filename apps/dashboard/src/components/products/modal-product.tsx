@@ -100,7 +100,7 @@ export default function ModalProduct({ isOpen, onClose }: ModalProductProps) {
     });
     const { data } = await res.json();
 
-    if (data.categories) setCategories(data.categories);
+    if (data?.categories) setCategories(data.categories);
   };
 
   return (

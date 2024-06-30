@@ -23,17 +23,7 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{ .Values.store.service.users.port }}
-          env:
-            - name: DB_HOST
-              value: {{ .Values.store.service.users.env.DB_HOST }}
-            - name: DB_PORT
-              value: "{{ .Values.store.service.users.env.DB_PORT }}"
-            - name: DB_USERNAME
-              value: {{ .Values.store.service.users.env.DB_USERNAME }}
-            - name: DB_PASSWORD
-              value: {{ .Values.store.service.users.env.DB_PASSWORD }}
-            - name: DB_NAME
-              value: {{ .Values.store.service.users.env.DB_NAME }}
+          env: {{ .Values.store.service.users.env | toYaml | nindent 12 }}
           resources:
             requests:
               memory: "64Mi"

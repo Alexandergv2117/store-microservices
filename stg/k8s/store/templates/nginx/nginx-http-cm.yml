@@ -23,19 +23,19 @@ data:
       # Auth service
       upstream auth {
         least_conn;
-        server {{ .Values.store.service.auth.name }}-service.store.svc.cluster.local:{{ .Values.store.service.auth.port }};
+        server {{ .Values.store.service.auth.name }}-service.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.store.service.auth.port }};
       }
 
       # Product service
       upstream products {
         least_conn;
-        server {{ .Values.store.service.products.name }}-service.store.svc.cluster.local:{{ .Values.store.service.products.port }};
+        server {{ .Values.store.service.products.name }}-service.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.store.service.products.port }};
       }
 
       # User service
       upstream users {
         least_conn;
-        server {{ .Values.store.service.users.name }}-service.store.svc.cluster.local:{{ .Values.store.service.users.port }};
+        server {{ .Values.store.service.users.name }}-service.{{ .Values.global.namespace }}.svc.cluster.local:{{ .Values.store.service.users.port }};
       }
 
       # RATE LIMITING
@@ -128,7 +128,7 @@ data:
           proxy_pass http://users;
         }
 
-        location /user/user/public {
+        location /user/public {
           proxy_pass http://users;
         }
 

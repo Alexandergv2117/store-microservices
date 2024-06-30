@@ -16,6 +16,7 @@ export class ImageRepository implements IImageRepository {
   private s3Client: S3Client;
 
   constructor() {
+    console.log('AWS_BUCKET_NAME_REGION', AWS_BUCKET_NAME_REGION);
     this.s3Client = new S3Client({
       region: AWS_BUCKET_NAME_REGION,
       credentials: {

@@ -17,6 +17,7 @@ module.exports = {
         'ci',
         'build',
         'release',
+        'publish',
       ],
     ],
     'scope-enum': [

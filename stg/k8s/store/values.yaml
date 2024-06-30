@@ -26,19 +26,24 @@ store:
       port: 5000
       type: NodePort
       strategy: RollingUpdate
-      replicas: 1
+      replicas: 3
       minReplicas: 1
       maxReplicas: 10
       cpuUtilization: 80
-      image: "alexandergv2117/store-auth"
+      image: "alexandergv2117/store-auth-svc-fiber-backend"
       env:
-        DB_HOST: "postgresql-service"
-        DB_PORT: 5432
-        DB_USERNAME: "admin"
-        DB_PASSWORD: "admin"
-        DB_NAME: "store_users"
-        JWT_SECRET: "secret"
-        PUBLIC_KEY: "-----BEGIN PUBLIC KEY----- MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA+yUkonzsXu3CIQn6czy8 /1js/Ut6FAGtOCnbPNKZltwWZOMzNnQGUvtDUqMZ92n/tW6zAa/3Fe/23K8fSj+c TmcyiDhJPRw6Mei8/mimHxT+vut/tWakA+GBFtwc8eQUNzvtkxz8RvhNPKTHLo7s lpWNPcSb+cA4MfW0aqpe5b1QX9F37h6FI9oU2hthp188Qqb+4Fh3USTho2IG9IHG HDtuTqqXU/h5bkeBt0B+PbeNdb8Vrqd2Ruu2PlMVCv/CvV0L7Xm0ClUybt/ry9BS 99GDN81AuBGLvyHBaufbyelhAW2mpiNu8FVOhpoXjUdheoiYLFoNg3mKu85BjydA JwIDAQAB -----END PUBLIC KEY-----"
+        - name: DB_HOST
+          value: "postgresql-service"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USERNAME
+          value: "admin"
+        - name: DB_PASSWORD
+          value: "admin"
+        - name: DB_NAME
+          value: "store_users"
+        - name: JWT_SECRET
+          value: "secret"
 
     users:
       name: "store-users"
@@ -49,13 +54,26 @@ store:
       minReplicas: 1
       maxReplicas: 10
       cpuUtilization: 80
-      image: "alexandergv2117/store-users"
+      image: "alexandergv2117/store-users-svc-nestjs-backend"
       env:
-        DB_HOST: "postgresql-service"
-        DB_PORT: 5432
-        DB_USERNAME: "admin"
-        DB_PASSWORD: "admin"
-        DB_NAME: "store_users"
+        - name: DB_HOST
+          value: "postgresql-service"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USERNAME
+          value: "admin"
+        - name: DB_PASSWORD
+          value: "admin"
+        - name: DB_NAME
+          value: "store_users"
+        - name: AWS_BUCKET_NAME_IMAGE
+          value: ""
+        - name: AWS_BUCKET_NAME_REGION
+          value: ""
+        - name: AWS_PUBLIC_KEY
+          value: ""
+        - name: AWS_SECRET_KEY
+          value: ""
       
     products:
       name: "store-products"
@@ -66,10 +84,23 @@ store:
       minReplicas: 1
       maxReplicas: 10
       cpuUtilization: 80
-      image: "alexandergv2117/store-products"
+      image: "alexandergv2117/store-products-svc-nestjs-backend"
       env:
-        DB_HOST: "postgresql-service"
-        DB_PORT: 5432
-        DB_USERNAME: "admin"
-        DB_PASSWORD: "admin"
-        DB_NAME: "store_products"
+        - name: "DB_HOST"
+          value: "postgresql-service"
+        - name: "DB_PORT"
+          value: "5432"
+        - name: "DB_USERNAME"
+          value: "admin"
+        - name: "DB_PASSWORD"
+          value: "admin"
+        - name: "DB_NAME"
+          value: "store_products"
+        - name: AWS_BUCKET_NAME_IMAGE
+          value: ""
+        - name: AWS_BUCKET_NAME_REGION
+          value: ""
+        - name: AWS_PUBLIC_KEY
+          value: ""
+        - name: AWS_SECRET_KEY
+          value: ""
